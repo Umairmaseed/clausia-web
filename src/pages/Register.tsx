@@ -12,30 +12,29 @@ import {
   useBreakpointValue,
   Center,
   useToast,
-} from '@chakra-ui/react';
-import { useState } from 'react';
-import Navbar from '../components/navbar';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { UserService } from '../services/User';
-import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
-
+} from '@chakra-ui/react'
+import { useState } from 'react'
+import Navbar from '../components/navbar'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { UserService } from '../services/User'
+import { AxiosError } from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 const Register = () => {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  const queryClient = useQueryClient()
+  const navigate = useNavigate()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
     md: '1fr 1fr',
-  });
+  })
 
   const justifyForm = useBreakpointValue({
     base: 'center',
     md: 'start',
-  });
+  })
 
-  const toast = useToast();
+  const toast = useToast()
 
   // State for form fields and errors
   const [formData, setFormData] = useState({
@@ -46,8 +45,8 @@ const Register = () => {
     cpf: '',
     password: '',
     confirmPassword: '',
-  });
-  
+  })
+
   const [errors, setErrors] = useState({
     username: '',
     name: '',
@@ -56,32 +55,32 @@ const Register = () => {
     cpf: '',
     password: '',
     confirmPassword: '',
-  });
+  })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
       ...formData,
       [e.target.id]: e.target.value,
-    });
-    
+    })
+
     // Reset error for this field when user types
     setErrors({
       ...errors,
       [e.target.id]: '',
-    });
-  };
+    })
+  }
 
   const mutation = useMutation({
     mutationFn: UserService.registerUser,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["Users"] })
+      queryClient.invalidateQueries({ queryKey: ['Users'] })
       toast({
         title: 'Registration successful!',
         status: 'success',
         duration: 3000,
         isClosable: true,
-      });
-      navigate('/otp');
+      })
+      navigate('/otp')
     },
     onError: (error: AxiosError) => {
       toast({
@@ -90,12 +89,12 @@ const Register = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
-      });
+      })
     },
-  });
+  })
 
   const validateForm = () => {
-    let valid = true;
+    let valid = true
     const newErrors: RegisterUser = {
       username: '',
       name: '',
@@ -104,50 +103,54 @@ const Register = () => {
       cpf: '',
       password: '',
       confirmPassword: '',
-    };
+    }
 
     if (!formData.username) {
-      newErrors.username = 'Username is required';
-      valid = false;
+      newErrors.username = 'Username is required'
+      valid = false
     }
     if (!formData.name) {
-      newErrors.name = 'Name is required';
-      valid = false;
+      newErrors.name = 'Name is required'
+      valid = false
     }
     if (!formData.email) {
-      newErrors.email = 'Email is required';
-      valid = false;
+      newErrors.email = 'Email is required'
+      valid = false
     }
     if (!formData.phone) {
-      newErrors.phone = 'Phone number is required';
-      valid = false;
+      newErrors.phone = 'Phone number is required'
+      valid = false
     }
     if (!formData.cpf) {
-      newErrors.cpf = 'CPF is required';
-      valid = false;
+      newErrors.cpf = 'CPF is required'
+      valid = false
     }
     if (!formData.password) {
-      newErrors.password = 'Password is required';
-      valid = false;
+      newErrors.password = 'Password is required'
+      valid = false
     }
     if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirm password is required';
-      valid = false;
+      newErrors.confirmPassword = 'Confirm password is required'
+      valid = false
     }
-    if (formData.password && formData.confirmPassword && formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match';
-      valid = false;
+    if (
+      formData.password &&
+      formData.confirmPassword &&
+      formData.password !== formData.confirmPassword
+    ) {
+      newErrors.confirmPassword = 'Passwords do not match'
+      valid = false
     }
 
-    setErrors(newErrors);
-    return valid;
-  };
+    setErrors(newErrors)
+    return valid
+  }
 
   const handleRegister = async () => {
-    if (!validateForm()) return;
+    if (!validateForm()) return
 
-      mutation.mutate(formData);
-  };
+    mutation.mutate(formData)
+  }
 
   return (
     <>
@@ -169,7 +172,11 @@ const Register = () => {
               </Heading>
               <VStack spacing={4}>
                 {/* Username Field */}
-                <FormControl id="username" isInvalid={!!errors.username} isRequired>
+                <FormControl
+                  id="username"
+                  isInvalid={!!errors.username}
+                  isRequired
+                >
                   <FormLabel fontWeight="bold">Username</FormLabel>
                   <Input
                     type="text"
@@ -180,7 +187,9 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.username && <FormErrorMessage>{errors.username}</FormErrorMessage>}
+                  {errors.username && (
+                    <FormErrorMessage>{errors.username}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* Name Field */}
@@ -195,7 +204,9 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.name && <FormErrorMessage>{errors.name}</FormErrorMessage>}
+                  {errors.name && (
+                    <FormErrorMessage>{errors.name}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* Email Field */}
@@ -210,7 +221,9 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.email && <FormErrorMessage>{errors.email}</FormErrorMessage>}
+                  {errors.email && (
+                    <FormErrorMessage>{errors.email}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* Phone Field */}
@@ -225,7 +238,9 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.phone && <FormErrorMessage>{errors.phone}</FormErrorMessage>}
+                  {errors.phone && (
+                    <FormErrorMessage>{errors.phone}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* CPF Field */}
@@ -240,11 +255,17 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.cpf && <FormErrorMessage>{errors.cpf}</FormErrorMessage>}
+                  {errors.cpf && (
+                    <FormErrorMessage>{errors.cpf}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* Password Field */}
-                <FormControl id="password" isInvalid={!!errors.password} isRequired>
+                <FormControl
+                  id="password"
+                  isInvalid={!!errors.password}
+                  isRequired
+                >
                   <FormLabel fontWeight="bold">Password</FormLabel>
                   <Input
                     type="password"
@@ -255,11 +276,17 @@ const Register = () => {
                     onChange={handleChange}
                     _placeholder={{ fontWeight: 'medium' }}
                   />
-                  {errors.password && <FormErrorMessage>{errors.password}</FormErrorMessage>}
+                  {errors.password && (
+                    <FormErrorMessage>{errors.password}</FormErrorMessage>
+                  )}
                 </FormControl>
 
                 {/* Confirm Password Field */}
-                <FormControl id="confirmPassword" isInvalid={!!errors.confirmPassword} isRequired>
+                <FormControl
+                  id="confirmPassword"
+                  isInvalid={!!errors.confirmPassword}
+                  isRequired
+                >
                   <FormLabel fontWeight="bold">Confirm Password</FormLabel>
                   <Input
                     type="password"
@@ -271,12 +298,19 @@ const Register = () => {
                     _placeholder={{ fontWeight: 'medium' }}
                   />
                   {errors.confirmPassword && (
-                    <FormErrorMessage>{errors.confirmPassword}</FormErrorMessage>
+                    <FormErrorMessage>
+                      {errors.confirmPassword}
+                    </FormErrorMessage>
                   )}
                 </FormControl>
 
                 {/* Register Button */}
-                <Button colorScheme="blue" width="full" mt={4} onClick={handleRegister}>
+                <Button
+                  colorScheme="blue"
+                  width="full"
+                  mt={4}
+                  onClick={handleRegister}
+                >
                   Register
                 </Button>
               </VStack>
@@ -287,7 +321,7 @@ const Register = () => {
         </Grid>
       </Center>
     </>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register
