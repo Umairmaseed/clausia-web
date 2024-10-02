@@ -15,8 +15,16 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import Navbar from '../components/navbar';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { UserService } from '../services/User';
+import { AxiosError } from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 const Register = () => {
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
+
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
     md: '1fr 1fr',
@@ -63,11 +71,41 @@ const Register = () => {
     });
   };
 
+  const mutation = useMutation({
+    mutationFn: UserService.registerUser,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["Users"] })
+      toast({
+        title: 'Registration successful!',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
+      navigate('/otp');
+    },
+    onError: (error: AxiosError) => {
+      toast({
+        title: 'Registration failed.',
+        description: error?.message || 'Something went wrong.',
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      });
+    },
+  });
+
   const validateForm = () => {
     let valid = true;
-    const newErrors: any = {};
+    const newErrors: RegisterUser = {
+      username: '',
+      name: '',
+      email: '',
+      phone: '',
+      cpf: '',
+      password: '',
+      confirmPassword: '',
+    };
 
-    // Basic validation for empty fields
     if (!formData.username) {
       newErrors.username = 'Username is required';
       valid = false;
@@ -108,42 +146,7 @@ const Register = () => {
   const handleRegister = async () => {
     if (!validateForm()) return;
 
-    try {
-      const response = await fetch('/api/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        toast({
-          title: 'Registration successful!',
-          status: 'success',
-          duration: 3000,
-          isClosable: true,
-        });
-      } else {
-        const errorData = await response.json();
-        toast({
-          title: 'Registration failed.',
-          description: errorData.message || 'Something went wrong.',
-          status: 'error',
-          duration: 3000,
-          isClosable: true,
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Error occurred.',
-        description: 'Please try again later.',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      });
-      console.error('An unexpected error occurred:', error);
-    }
+      mutation.mutate(formData);
   };
 
   return (
