@@ -13,16 +13,17 @@ import {
   Center,
   useToast,
 } from '@chakra-ui/react'
-import { useState } from 'react'
-import Navbar from '../components/navbar'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { useForm } from 'react-hook-form'
 import { UserService } from '../services/User'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
+import Navbar from '../components/navbar'
 
 const Register = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
+  const toast = useToast()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -34,42 +35,17 @@ const Register = () => {
     md: 'start',
   })
 
-  const toast = useToast()
-
-  // State for form fields and errors
-  const [formData, setFormData] = useState({
-    username: '',
-    name: '',
-    email: '',
-    phone: '',
-    cpf: '',
-    password: '',
-    confirmPassword: '',
+  // React Hook Form initialization
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    mode: 'onBlur',
   })
 
-  const [errors, setErrors] = useState({
-    username: '',
-    name: '',
-    email: '',
-    phone: '',
-    cpf: '',
-    password: '',
-    confirmPassword: '',
-  })
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.id]: e.target.value,
-    })
-
-    // Reset error for this field when user types
-    setErrors({
-      ...errors,
-      [e.target.id]: '',
-    })
-  }
-
+  // Mutation for registration
   const mutation = useMutation({
     mutationFn: UserService.registerUser,
     onSuccess: () => {
@@ -93,63 +69,9 @@ const Register = () => {
     },
   })
 
-  const validateForm = () => {
-    let valid = true
-    const newErrors: RegisterUser = {
-      username: '',
-      name: '',
-      email: '',
-      phone: '',
-      cpf: '',
-      password: '',
-      confirmPassword: '',
-    }
-
-    if (!formData.username) {
-      newErrors.username = 'Username is required'
-      valid = false
-    }
-    if (!formData.name) {
-      newErrors.name = 'Name is required'
-      valid = false
-    }
-    if (!formData.email) {
-      newErrors.email = 'Email is required'
-      valid = false
-    }
-    if (!formData.phone) {
-      newErrors.phone = 'Phone number is required'
-      valid = false
-    }
-    if (!formData.cpf) {
-      newErrors.cpf = 'CPF is required'
-      valid = false
-    }
-    if (!formData.password) {
-      newErrors.password = 'Password is required'
-      valid = false
-    }
-    if (!formData.confirmPassword) {
-      newErrors.confirmPassword = 'Confirm password is required'
-      valid = false
-    }
-    if (
-      formData.password &&
-      formData.confirmPassword &&
-      formData.password !== formData.confirmPassword
-    ) {
-      newErrors.confirmPassword = 'Passwords do not match'
-      valid = false
-    }
-
-    setErrors(newErrors)
-    return valid
-  }
-
-  const handleRegister = async () => {
-    if (!validateForm()) return
-
-    mutation.mutate(formData)
+  // Submit handler
+  const onSubmit = (data: any) => {
+    mutation.mutate(data)
   }
 
   return (
@@ -165,154 +87,151 @@ const Register = () => {
               borderRadius="xl"
               border="1px solid"
               borderColor="gray.200"
-              w={{ base: 'full', md: '500px' }}
+              w={{ base: 'full', md: '400px' }}
             >
               <Heading mb={6} size="3xl" color="gray.600" textAlign="center">
                 Register
               </Heading>
               <VStack spacing={4}>
-                {/* Username Field */}
-                <FormControl
-                  id="username"
-                  isInvalid={!!errors.username}
-                  isRequired
+                {/* Form fields */}
+                <form
+                  onSubmit={handleSubmit(onSubmit)}
+                  style={{ width: '100%' }}
                 >
-                  <FormLabel fontWeight="bold">Username</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Enter username"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.username}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.username && (
-                    <FormErrorMessage>{errors.username}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* Name Field */}
-                <FormControl id="name" isInvalid={!!errors.name} isRequired>
-                  <FormLabel fontWeight="bold">Name</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Enter name"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.name}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.name && (
-                    <FormErrorMessage>{errors.name}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* Email Field */}
-                <FormControl id="email" isInvalid={!!errors.email} isRequired>
-                  <FormLabel fontWeight="bold">Email</FormLabel>
-                  <Input
-                    type="email"
-                    placeholder="Enter email"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.email}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.email && (
-                    <FormErrorMessage>{errors.email}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* Phone Field */}
-                <FormControl id="phone" isInvalid={!!errors.phone} isRequired>
-                  <FormLabel fontWeight="bold">Phone</FormLabel>
-                  <Input
-                    type="tel"
-                    placeholder="Enter phone number"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.phone}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.phone && (
-                    <FormErrorMessage>{errors.phone}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* CPF Field */}
-                <FormControl id="cpf" isInvalid={!!errors.cpf} isRequired>
-                  <FormLabel fontWeight="bold">CPF</FormLabel>
-                  <Input
-                    type="text"
-                    placeholder="Enter CPF"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.cpf}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.cpf && (
-                    <FormErrorMessage>{errors.cpf}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* Password Field */}
-                <FormControl
-                  id="password"
-                  isInvalid={!!errors.password}
-                  isRequired
-                >
-                  <FormLabel fontWeight="bold">Password</FormLabel>
-                  <Input
-                    type="password"
-                    placeholder="Enter password"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.password}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.password && (
-                    <FormErrorMessage>{errors.password}</FormErrorMessage>
-                  )}
-                </FormControl>
-
-                {/* Confirm Password Field */}
-                <FormControl
-                  id="confirmPassword"
-                  isInvalid={!!errors.confirmPassword}
-                  isRequired
-                >
-                  <FormLabel fontWeight="bold">Confirm Password</FormLabel>
-                  <Input
-                    type="password"
-                    placeholder="Confirm password"
-                    bg="gray.100"
-                    fontWeight="bold"
-                    value={formData.confirmPassword}
-                    onChange={handleChange}
-                    _placeholder={{ fontWeight: 'medium' }}
-                  />
-                  {errors.confirmPassword && (
+                  {/* Username Field */}
+                  <FormControl isInvalid={!!errors.username} isRequired>
+                    <FormLabel fontWeight="bold">Username</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter username"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('username', {
+                        required: 'Username is required',
+                      })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
                     <FormErrorMessage>
-                      {errors.confirmPassword}
+                      {errors.username?.message as React.ReactNode}
                     </FormErrorMessage>
-                  )}
-                </FormControl>
+                  </FormControl>
 
-                {/* Register Button */}
-                <Button
-                  colorScheme="blue"
-                  width="full"
-                  mt={4}
-                  onClick={handleRegister}
-                >
-                  Register
-                </Button>
+                  {/* Name Field */}
+                  <FormControl isInvalid={!!errors.name} isRequired>
+                    <FormLabel fontWeight="bold">Name</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter name"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('name', { required: 'Name is required' })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.name?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* Email Field */}
+                  <FormControl isInvalid={!!errors.email} isRequired>
+                    <FormLabel fontWeight="bold">Email</FormLabel>
+                    <Input
+                      type="email"
+                      placeholder="Enter email"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('email', {
+                        required: 'Email is required',
+                        pattern: {
+                          value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                          message: 'Invalid email address',
+                        },
+                      })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.email?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* Phone Field */}
+                  <FormControl isInvalid={!!errors.phone} isRequired>
+                    <FormLabel fontWeight="bold">Phone</FormLabel>
+                    <Input
+                      type="tel"
+                      placeholder="Enter phone number"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('phone', {
+                        required: 'Phone number is required',
+                      })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.phone?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* CPF Field */}
+                  <FormControl isInvalid={!!errors.cpf} isRequired>
+                    <FormLabel fontWeight="bold">CPF</FormLabel>
+                    <Input
+                      type="text"
+                      placeholder="Enter CPF"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('cpf', { required: 'CPF is required' })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.cpf?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* Password Field */}
+                  <FormControl isInvalid={!!errors.password} isRequired>
+                    <FormLabel fontWeight="bold">Password</FormLabel>
+                    <Input
+                      type="password"
+                      placeholder="Enter password"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('password', {
+                        required: 'Password is required',
+                      })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.password?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* Confirm Password Field */}
+                  <FormControl isInvalid={!!errors.confirmPassword} isRequired>
+                    <FormLabel fontWeight="bold">Confirm Password</FormLabel>
+                    <Input
+                      type="password"
+                      placeholder="Confirm password"
+                      bg="gray.100"
+                      fontWeight="bold"
+                      {...register('confirmPassword', {
+                        required: 'Confirm password is required',
+                        validate: (value) =>
+                          value === watch('password') ||
+                          'Passwords do not match',
+                      })}
+                      _placeholder={{ fontWeight: 'medium' }}
+                    />
+                    <FormErrorMessage>
+                      {errors.confirmPassword?.message as React.ReactNode}
+                    </FormErrorMessage>
+                  </FormControl>
+
+                  {/* Register Button */}
+                  <Button colorScheme="blue" width="full" mt={4} type="submit">
+                    Register
+                  </Button>
+                </form>
               </VStack>
             </Box>
           </GridItem>
