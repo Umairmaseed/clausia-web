@@ -1,6 +1,17 @@
 import { Box, Flex, Heading, HStack, Button } from '@chakra-ui/react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 const Navbar = () => {
+  const location = useLocation()
+  const navigate = useNavigate()
+
+  const [isLoginPage, setIsLoginPage] = useState(false)
+
+  useEffect(() => {
+    setIsLoginPage(location.pathname === '/login')
+  }, [location.pathname])
+
   return (
     <Box bg="white" boxShadow="md">
       <Flex
@@ -53,8 +64,11 @@ const Navbar = () => {
             bg="orange.25"
             p={2}
             h={8}
+            onClick={() => {
+              navigate(isLoginPage ? '/register' : '/login')
+            }}
           >
-            Login
+            {isLoginPage ? 'Register' : 'Login'}
           </Button>
         </HStack>
       </Flex>
