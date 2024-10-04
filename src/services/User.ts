@@ -7,4 +7,7 @@ export const UserService = {
   confirmOtp: async (username: string, otp: string) => {
     return api.post('otp', { username, otp }).then((res) => res.data)
   },
+  loginUser: async (user: LoginUser) => {
+    return api.post('login', user).then((res) => res.data)
+  },
 }

@@ -7,3 +7,8 @@ interface RegisterUser {
   password: string
   confirmPassword: string
 }
+
+interface LoginUser {
+  username: string
+  password: string
+}
