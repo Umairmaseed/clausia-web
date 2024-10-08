@@ -4,6 +4,7 @@ import Otp from './pages/Otp';
 import Login from './pages/Login';
 import { AuthProvider } from './context/Authcontext'; 
 import PrivateRoute from './components/PrivateRoute'; 
+import Home from './pages/Home';
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           
           {/* Protected Routes */}
-          <Route path="/home" element={<PrivateRoute element={<Home />} />} />
+          <Route path="/" element={<PrivateRoute element={<Home />} />} />
           </Routes>
       </AuthProvider>
     </Router>
