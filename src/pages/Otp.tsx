@@ -7,6 +7,7 @@ import {
   FormErrorMessage,
   useToast,
   Heading,
+  Flex
 } from '@chakra-ui/react'
 import Navbar from '../components/navbar'
 import { useState } from 'react'
@@ -94,6 +95,7 @@ const Otp = () => {
   return (
     <>
       <Navbar />
+      <Flex  pt={20} pl={20}>
       <Box
         bg="white"
         p={8}
@@ -146,6 +148,7 @@ const Otp = () => {
           </Button>
         </Box>
       </Box>
+      </Flex>
     </>
   )
 }

@@ -20,9 +20,11 @@ import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import React from 'react'
+import { useAuth } from '../context/Authcontext'
 
 const Login = () => {
   const navigate = useNavigate()
+  const auth = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -51,6 +53,7 @@ const Login = () => {
         duration: 3000,
         isClosable: true,
       })
+      auth.login()
       navigate('/')
     },
     onError: (error: AxiosError) => {

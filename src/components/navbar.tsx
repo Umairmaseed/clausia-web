@@ -170,6 +170,7 @@ const Navbar = () => {
                     color="gray.400"
                     fontSize="sm"
                     textAlign={'center'}
+                    my={2}
                   >
                     {user?.email}
                   </Text>

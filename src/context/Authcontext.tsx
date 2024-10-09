@@ -2,12 +2,14 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { UserService } from '../services/User'
 import { useNavigate } from 'react-router-dom'
+import { set } from 'react-hook-form'
 
 type AuthContextType = {
   user: User | null
   isLoggedIn: boolean
   isLoading: boolean
   logout: () => void
+  login: () => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -42,10 +44,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigate('/login')
   }
 
+  const login = () => {
+    data && setUser(data)
+  }
+
   const isLoggedIn = Boolean(user)
 
   return (
-    <AuthContext.Provider value={{ user, isLoggedIn, isLoading, logout }}>
+    <AuthContext.Provider value={{ user, isLoggedIn, isLoading, logout, login }}>
       {children}
     </AuthContext.Provider>
   )
