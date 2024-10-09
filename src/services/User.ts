@@ -10,14 +10,16 @@ export const UserService = {
   loginUser: async (user: LoginUser) => {
     return api.post('login', user).then((res) => res.data)
   },
-  infoUser: async () => { 
-    return api.get<{
-      id: string
-      name: string
-      username: string
-      email: string
-      phone: string
-      cpf: string
-    }>('user/info').then((res) => res.data)
-  }
+  infoUser: async () => {
+    return api
+      .get<{
+        id: string
+        name: string
+        username: string
+        email: string
+        phone: string
+        cpf: string
+      }>('user/info')
+      .then((res) => res.data)
+  },
 }

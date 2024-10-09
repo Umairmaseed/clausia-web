@@ -1,10 +1,10 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Register from './pages/Register';
-import Otp from './pages/Otp';
-import Login from './pages/Login';
-import { AuthProvider } from './context/Authcontext'; 
-import PrivateRoute from './components/PrivateRoute'; 
-import Home from './pages/Home';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
+import Register from './pages/Register'
+import Otp from './pages/Otp'
+import Login from './pages/Login'
+import { AuthProvider } from './context/Authcontext'
+import PrivateRoute from './context/PrivateRoute'
+import Home from './pages/Home'
 
 function App() {
   return (
@@ -15,13 +15,13 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/otp" element={<Otp />} />
           <Route path="/login" element={<Login />} />
-          
+
           {/* Protected Routes */}
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
-          </Routes>
+        </Routes>
       </AuthProvider>
     </Router>
-  );
+  )
 }
 
-export default App;
+export default App
