@@ -7,7 +7,7 @@ import {
   FormErrorMessage,
   useToast,
   Heading,
-  Flex
+  Flex,
 } from '@chakra-ui/react'
 import Navbar from '../components/navbar'
 import { useState } from 'react'
@@ -95,59 +95,59 @@ const Otp = () => {
   return (
     <>
       <Navbar />
-      <Flex  pt={20} pl={20}>
-      <Box
-        bg="white"
-        p={8}
-        boxShadow="xl"
-        borderRadius="xl"
-        border="1px solid"
-        borderColor="gray.200"
-        w={{ base: 'full', md: '450px' }}
-        ml="auto"
-        mr="auto"
-        mt="20"
-      >
-        <Box>
-          <Heading mb={6} size="xl" color="gray.600" textAlign="center">
-            Confirm OTP
-          </Heading>
-          {/* Username Field */}
-          <FormControl id="username" isInvalid={!!errors.username} isRequired>
-            <FormLabel>Username</FormLabel>
-            <Input
-              type="text"
-              placeholder="Username"
-              bg="gray.100"
-              mb={4}
-              value={formData.username}
-              onChange={handleChange}
-            />
-            {errors.username && (
-              <FormErrorMessage>{errors.username}</FormErrorMessage>
-            )}
-          </FormControl>
+      <Flex pt={20} pl={20}>
+        <Box
+          bg="white"
+          p={8}
+          boxShadow="xl"
+          borderRadius="xl"
+          border="1px solid"
+          borderColor="gray.200"
+          w={{ base: 'full', md: '450px' }}
+          ml="auto"
+          mr="auto"
+          mt="20"
+        >
+          <Box>
+            <Heading mb={6} size="xl" color="gray.600" textAlign="center">
+              Confirm OTP
+            </Heading>
+            {/* Username Field */}
+            <FormControl id="username" isInvalid={!!errors.username} isRequired>
+              <FormLabel>Username</FormLabel>
+              <Input
+                type="text"
+                placeholder="Username"
+                bg="gray.100"
+                mb={4}
+                value={formData.username}
+                onChange={handleChange}
+              />
+              {errors.username && (
+                <FormErrorMessage>{errors.username}</FormErrorMessage>
+              )}
+            </FormControl>
 
-          {/* OTP Field */}
-          <FormControl id="otp" isInvalid={!!errors.otp} isRequired>
-            <FormLabel>OTP</FormLabel>
-            <Input
-              type="text"
-              placeholder="Enter OTP"
-              bg="gray.100"
-              mb={4}
-              value={formData.otp}
-              onChange={handleChange}
-            />
-            {errors.otp && <FormErrorMessage>{errors.otp}</FormErrorMessage>}
-          </FormControl>
+            {/* OTP Field */}
+            <FormControl id="otp" isInvalid={!!errors.otp} isRequired>
+              <FormLabel>OTP</FormLabel>
+              <Input
+                type="text"
+                placeholder="Enter OTP"
+                bg="gray.100"
+                mb={4}
+                value={formData.otp}
+                onChange={handleChange}
+              />
+              {errors.otp && <FormErrorMessage>{errors.otp}</FormErrorMessage>}
+            </FormControl>
 
-          {/* Submit Button */}
-          <Button colorScheme="blue" mt={4} onClick={handleSubmit}>
-            Submit
-          </Button>
+            {/* Submit Button */}
+            <Button colorScheme="blue" mt={4} onClick={handleSubmit}>
+              Submit
+            </Button>
+          </Box>
         </Box>
-      </Box>
       </Flex>
     </>
   )

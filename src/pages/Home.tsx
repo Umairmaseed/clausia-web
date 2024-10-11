@@ -109,7 +109,7 @@ const Home = () => {
 
             {/* Cards */}
             <Flex
-            //   justify="space-between"
+              //   justify="space-between"
               align="center"
               gap={10}
               pt={10}
@@ -145,7 +145,11 @@ const Home = () => {
                     Manage Document
                   </ListItem>
                 </List>
-                <Button colorScheme="orange" size="sm" onClick={()=>navigate('/document')}>
+                <Button
+                  colorScheme="orange"
+                  size="sm"
+                  onClick={() => navigate('/document')}
+                >
                   Explore
                 </Button>
               </Box>
@@ -177,7 +181,13 @@ const Home = () => {
                     Manage Contract
                   </ListItem>
                 </List>
-                <Button colorScheme="orange" size="sm" onClick={()=>{navigate('/contract')}}>
+                <Button
+                  colorScheme="orange"
+                  size="sm"
+                  onClick={() => {
+                    navigate('/contract')
+                  }}
+                >
                   Explore
                 </Button>
               </Box>

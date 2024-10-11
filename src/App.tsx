@@ -5,6 +5,7 @@ import Login from './pages/Login'
 import { AuthProvider } from './context/Authcontext'
 import PrivateRoute from './context/PrivateRoute'
 import Home from './pages/Home'
+import Document from './pages/Document'
 
 function App() {
   return (
@@ -18,6 +19,10 @@ function App() {
 
           {/* Protected Routes */}
           <Route path="/" element={<PrivateRoute element={<Home />} />} />
+          <Route
+            path="/document"
+            element={<PrivateRoute element={<Document />} />}
+          />
         </Routes>
       </AuthProvider>
     </Router>
