@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { UserService } from '../services/User'
 import { useNavigate } from 'react-router-dom'
-import { set } from 'react-hook-form'
 
 type AuthContextType = {
   user: User | null
@@ -10,6 +9,7 @@ type AuthContextType = {
   isLoading: boolean
   logout: () => void
   login: () => void
+  setLoading: (state: boolean) => void
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
@@ -20,6 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const navigate = useNavigate()
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(Boolean(user))
 
   const {
     data,
@@ -27,7 +28,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     error,
   } = useQuery({
     queryKey: ['UserInfo'],
-    queryFn: () => UserService.infoUser(),
+    queryFn: () => { 
+      UserService.infoUser()
+    },
   })
 
   useEffect(() => {
@@ -44,15 +47,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     navigate('/login')
   }
 
+
   const login = () => {
+    setIsLoading(true)
     data && setUser(data)
+    setIsLoggedIn(Boolean(user))
+    setIsLoading(false)
   }
 
-  const isLoggedIn = Boolean(user)
+
+  const setLoading = (state: boolean) => {
+    setIsLoading(state)
+  }
+
 
   return (
     <AuthContext.Provider
-      value={{ user, isLoggedIn, isLoading, logout, login }}
+      value={{ user, isLoggedIn, isLoading, logout, login, setLoading }}
     >
       {children}
     </AuthContext.Provider>
