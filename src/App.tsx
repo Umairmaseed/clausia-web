@@ -6,6 +6,7 @@ import { AuthProvider } from './context/Authcontext'
 import PrivateRoute from './context/PrivateRoute'
 import Home from './pages/Home'
 import Document from './pages/Document'
+import CreateDocumentSigning from './pages/CreateDocumentSigning'
 
 function App() {
   return (
@@ -22,6 +23,10 @@ function App() {
           <Route
             path="/document"
             element={<PrivateRoute element={<Document />} />}
+          />
+          <Route
+            path="/document/create"
+            element={<PrivateRoute element={<CreateDocumentSigning />} />}
           />
         </Routes>
       </AuthProvider>
