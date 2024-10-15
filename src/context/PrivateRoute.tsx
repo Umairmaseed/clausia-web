@@ -1,4 +1,5 @@
 import React from 'react'
+import Loader from '../components/loader'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from './Authcontext'
 interface PrivateRouteProps {
@@ -6,10 +7,12 @@ interface PrivateRouteProps {
 }
 
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
-  const { isLoggedIn } = useAuth()
+  const { isLoggedIn, isLoading } = useAuth()
 
-  return isLoggedIn ? <>{element}</> : <Navigate to="/login" replace />;
-  // return <>{element}</>
+  return <>
+  {isLoggedIn ? <>{element}</> : <Navigate to="/login" replace />};
+  {isLoading && <Loader/>}
+  </>
 }
 
 export default PrivateRoute
