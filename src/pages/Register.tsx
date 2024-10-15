@@ -78,7 +78,7 @@ const Register = () => {
     <>
       <Navbar />
       <Center p={8} minH="100vh" minW="100vw" bg="gray.50">
-        <Grid templateColumns={gridTemplateColumns} mt={16} ml={10} w="full">
+        <Grid templateColumns={gridTemplateColumns} mt={6} ml={10} w="full">
           <GridItem justifySelf={justifyForm}>
             <Box
               bg="white"

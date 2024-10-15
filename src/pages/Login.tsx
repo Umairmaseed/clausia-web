@@ -24,7 +24,7 @@ import { useAuth } from '../context/Authcontext'
 
 const Login = () => {
   const navigate = useNavigate()
-  const auth = useAuth()
+  const {login, setLoading} = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -53,7 +53,9 @@ const Login = () => {
         duration: 3000,
         isClosable: true,
       })
-      auth.login()
+      UserService.infoUser()
+      login()
+      setLoading(true)
       navigate('/')
     },
     onError: (error: AxiosError) => {
@@ -74,7 +76,7 @@ const Login = () => {
   return (
     <>
       <Navbar />
-      <Center p={8} minH="100vh" minW="100vw" bg="gray.50">
+      <Center px={8} minH="100vh" minW="100vw" bg="gray.50">
         <Grid templateColumns={gridTemplateColumns} ml={10} w="full">
           <GridItem justifySelf={justifyForm}>
             <Box

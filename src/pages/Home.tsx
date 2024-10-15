@@ -1,6 +1,5 @@
 import {
   Box,
-  Center,
   Flex,
   Heading,
   HStack,
@@ -27,7 +26,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <Flex minH="100vh" pt={20} pl={20}>
+      <Flex minH="100vh" pl={20}>
         {/* Sidebar */}
         <Box
           w="15%"
