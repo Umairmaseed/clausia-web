@@ -31,7 +31,7 @@ const Navbar = () => {
   }, [location.pathname])
 
   return (
-    <Box bg="white" boxShadow="md" position="fixed">
+    <Box bg="white" boxShadow="md" position="sticky">
       <Flex
         align="center"
         justify="space-between"
@@ -44,54 +44,7 @@ const Navbar = () => {
           Goprocess
         </Heading>
 
-        {!isLoggedIn ? (
-          <HStack spacing={4}>
-            {/* Common Links */}
-            <Button
-              variant="link"
-              color="black"
-              fontSize="sm"
-              display="block"
-              p={2}
-              _hover={{
-                bg: 'gray.100',
-                borderRadius: 'md',
-                outline: 'none',
-              }}
-              _focus={{ outline: 'none' }}
-            >
-              Pricing
-            </Button>
-            <Button
-              variant="link"
-              color="black"
-              fontSize="sm"
-              display="block"
-              p={2}
-              _hover={{
-                bg: 'gray.100',
-                borderRadius: 'md',
-                outline: 'none',
-              }}
-              _focus={{ outline: 'none' }}
-            >
-              Contact
-            </Button>
-            <Button
-              colorScheme="orange"
-              variant="outline"
-              fontSize="sm"
-              bg="orange.25"
-              p={2}
-              h={8}
-              onClick={() => {
-                navigate(isLoginPage ? '/register' : '/login')
-              }}
-            >
-              {isLoginPage ? 'Register' : 'Login'}
-            </Button>
-          </HStack>
-        ) : (
+        {isLoggedIn ?  (
           <HStack spacing={7}>
             <Menu>
               <MenuButton
@@ -192,7 +145,56 @@ const Navbar = () => {
               </MenuList>
             </Menu>
           </HStack>
-        )}
+        ):
+        (
+          <HStack spacing={4}>
+            {/* Common Links */}
+            <Button
+              variant="link"
+              color="black"
+              fontSize="sm"
+              display="block"
+              p={2}
+              _hover={{
+                bg: 'gray.100',
+                borderRadius: 'md',
+                outline: 'none',
+              }}
+              _focus={{ outline: 'none' }}
+            >
+              Pricing
+            </Button>
+            <Button
+              variant="link"
+              color="black"
+              fontSize="sm"
+              display="block"
+              p={2}
+              _hover={{
+                bg: 'gray.100',
+                borderRadius: 'md',
+                outline: 'none',
+              }}
+              _focus={{ outline: 'none' }}
+            >
+              Contact
+            </Button>
+            <Button
+              colorScheme="orange"
+              variant="outline"
+              fontSize="sm"
+              bg="orange.25"
+              p={2}
+              h={8}
+              onClick={() => {
+                navigate(isLoginPage ? '/register' : '/login')
+              }}
+            >
+              {isLoginPage ? 'Register' : 'Login'}
+            </Button>
+          </HStack>
+        ) 
+         }
       </Flex>
     </Box>
   )
