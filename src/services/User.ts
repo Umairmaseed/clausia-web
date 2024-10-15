@@ -22,4 +22,9 @@ export const UserService = {
       }>('user/info')
       .then((res) => res.data)
   },
+  confirmUser: async (confirmUserForm: ConfirmUser) => {
+    return api
+      .get('confirmuser', { params: confirmUserForm })
+      .then((res) => res.data)
+  },
 }
