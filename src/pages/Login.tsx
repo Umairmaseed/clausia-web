@@ -21,10 +21,11 @@ import { useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import React from 'react'
 import { useAuth } from '../context/Authcontext'
+import Loader from '../components/loader'
 
 const Login = () => {
   const navigate = useNavigate()
-  const {login, setLoading} = useAuth()
+  const {login, setLoading, isLoading } = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -46,19 +47,20 @@ const Login = () => {
 
   const mutation = useMutation({
     mutationFn: UserService.loginUser,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast({
         title: 'Login successful!',
         status: 'success',
         duration: 3000,
         isClosable: true,
       })
-      UserService.infoUser()
-      login()
-      setLoading(true)
+      const response =  await UserService.infoUser()
+      login(response)
+      setLoading(false)
       navigate('/')
     },
     onError: (error: AxiosError) => {
+      setLoading(false)
       toast({
         title: 'Login failed.',
         description: error?.message || 'Something went wrong.',
@@ -70,6 +72,7 @@ const Login = () => {
   })
 
   const handleLogin = (formData: any) => {
+    setLoading(true)
     mutation.mutate(formData)
   }
 
@@ -149,6 +152,7 @@ const Login = () => {
           </GridItem>
         </Grid>
       </Center>
+      {isLoading && <Loader />}
     </>
   )
 }

@@ -19,11 +19,15 @@ import { UserService } from '../services/User'
 import { AxiosError } from 'axios'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/navbar'
+import { useAuth } from '../context/Authcontext'
+import { set } from 'date-fns'
+import Loader from '../components/loader'
 
 const Register = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const toast = useToast()
+  const {isLoading, setLoading} = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -56,9 +60,11 @@ const Register = () => {
         duration: 3000,
         isClosable: true,
       })
+      setLoading(false)
       navigate('/otp')
     },
     onError: (error: AxiosError) => {
+      setLoading(false)
       toast({
         title: 'Registration failed.',
         description: error?.message || 'Something went wrong.',
@@ -71,6 +77,7 @@ const Register = () => {
 
   // Submit handler
   const onSubmit = (data: any) => {
+    setLoading(true)
     mutation.mutate(data)
   }
 
@@ -239,6 +246,7 @@ const Register = () => {
           <GridItem></GridItem>
         </Grid>
       </Center>
+      {isLoading && <Loader />}
     </>
   )
 }

@@ -27,4 +27,7 @@ export const UserService = {
       .get('confirmuser', { params: confirmUserForm })
       .then((res) => res.data)
   },
+  logoutUser: async () => {
+    return api.post('logout').then((res) => res.data)
+  }
 }
