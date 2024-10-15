@@ -5,3 +5,9 @@ interface User {
   phone: string
   cpf: string
 }
+
+interface ConfirmUser {
+  userName?: string
+  email?: string
+  id?: string
+}
