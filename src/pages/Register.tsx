@@ -27,7 +27,7 @@ const Register = () => {
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const toast = useToast()
-  const {isLoading, setLoading} = useAuth()
+  const { isLoading, setLoading } = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',

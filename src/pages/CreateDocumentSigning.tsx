@@ -17,9 +17,9 @@ import { FilePreview } from '../components/FileViewer'
 import InviteSignerForm from '../components/inviteSignerForm'
 import { DocumentService } from '../services/document'
 import { useNavigate } from 'react-router-dom'
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import { formatISO } from 'date-fns';
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import { formatISO } from 'date-fns'
 
 function CreateDocumentSigning() {
   const location = useLocation()
@@ -27,15 +27,14 @@ function CreateDocumentSigning() {
   const [viewFile, setViewFile] = useState(false)
   const [file, setFile] = useState<File | null>(null)
   const [signers, setSigners] = useState<string[]>([])
-  const [calendarOpen, setCalendarOpen] = useState(true);
+  const [calendarOpen, setCalendarOpen] = useState(true)
 
-  const [timeoutDate, setTimeoutDate] = useState<Date>(
-    () => {
-      const date = new Date();
-      date.setDate(date.getDate() + 2); 
-      return date;
-    }
-  );  const toast = useToast()
+  const [timeoutDate, setTimeoutDate] = useState<Date>(() => {
+    const date = new Date()
+    date.setDate(date.getDate() + 2)
+    return date
+  })
+  const toast = useToast()
   const navigate = useNavigate()
 
   const closeFileViewer = () => {
@@ -68,21 +67,20 @@ function CreateDocumentSigning() {
     }
   }
 
-
   const submitSigners = (signers: string[]) => {
     setSigners(signers)
     handleNext()
   }
 
   const submitDocument = async () => {
-    const formData = new FormData();
+    const formData = new FormData()
 
-  if (file) {
-    formData.append('files', file);
-  }
+    if (file) {
+      formData.append('files', file)
+    }
 
-  formData.append('requiredSignatures', signers.join(','));
-  formData.append('timeout', formatISO(timeoutDate));
+    formData.append('requiredSignatures', signers.join(','))
+    formData.append('timeout', formatISO(timeoutDate))
     try {
       const response = await DocumentService.createDocument(formData)
       toast({
@@ -150,7 +148,11 @@ function CreateDocumentSigning() {
           signers.length === 0 &&
           (viewFile ? (
             <Box>
-              <FilePreview isOpen={viewFile} onClose={closeFileViewer} file={file} />
+              <FilePreview
+                isOpen={viewFile}
+                onClose={closeFileViewer}
+                file={file}
+              />
             </Box>
           ) : (
             <Box>
@@ -174,27 +176,39 @@ function CreateDocumentSigning() {
           </Box>
         )}
         {activeStep === 4 && (
-          <Flex gap={20} justifyContent="center" alignItems="center" mb={4} mt={14}>
-          <DatePicker
-            selected={timeoutDate}
-            onChange={(date) => {
-              setTimeoutDate(date ? date : new Date());
-              setCalendarOpen(true); 
-            }}
-            showTimeSelect
-            dateFormat="Pp"
-            timeFormat="HH:mm"
-            timeIntervals={15}
-            timeCaption="Time"
-            placeholderText="Select date and time"
-            isClearable
-            open={calendarOpen} 
-            onCalendarClose={() => setCalendarOpen(false)} 
-          />
-          <Button mt={4} colorScheme="green" onClick={() => {handleNext()}}>
-            Next
-          </Button>
-        </Flex>
+          <Flex
+            gap={20}
+            justifyContent="center"
+            alignItems="center"
+            mb={4}
+            mt={14}
+          >
+            <DatePicker
+              selected={timeoutDate}
+              onChange={(date) => {
+                setTimeoutDate(date ? date : new Date())
+                setCalendarOpen(true)
+              }}
+              showTimeSelect
+              dateFormat="Pp"
+              timeFormat="HH:mm"
+              timeIntervals={15}
+              timeCaption="Time"
+              placeholderText="Select date and time"
+              isClearable
+              open={calendarOpen}
+              onCalendarClose={() => setCalendarOpen(false)}
+            />
+            <Button
+              mt={4}
+              colorScheme="green"
+              onClick={() => {
+                handleNext()
+              }}
+            >
+              Next
+            </Button>
+          </Flex>
         )}
         {activeStep === 5 && signers.length > 0 && (
           <Box mb={4}>
@@ -245,7 +259,7 @@ function CreateDocumentSigning() {
               </GridItem>
               <GridItem justifySelf="flex-start">
                 <Text fontSize="md" fontWeight="bold" color="orange.600">
-                    {timeoutDate.toLocaleString()}
+                  {timeoutDate.toLocaleString()}
                 </Text>
               </GridItem>
             </Grid>

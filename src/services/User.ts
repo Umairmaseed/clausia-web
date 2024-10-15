@@ -29,5 +29,5 @@ export const UserService = {
   },
   logoutUser: async () => {
     return api.post('logout').then((res) => res.data)
-  }
+  },
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import {
   Modal,
   ModalBody,
@@ -8,29 +8,28 @@ import {
   Skeleton,
   Box,
   Text,
-} from '@chakra-ui/react';
-import { Worker, Viewer } from '@react-pdf-viewer/core';
-import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout';
-
+} from '@chakra-ui/react'
+import { Worker, Viewer } from '@react-pdf-viewer/core'
+import { defaultLayoutPlugin } from '@react-pdf-viewer/default-layout'
 
 interface FilePreviewProps {
-  isOpen: boolean;
-  onClose: () => void;
-  file: File | null; 
+  isOpen: boolean
+  onClose: () => void
+  file: File | null
 }
 
 export function FilePreview({ isOpen, onClose, file }: FilePreviewProps) {
-  const [pdfUrl, setPdfUrl] = useState<string | null>(null);
-  const defaultLayoutPluginInstance = defaultLayoutPlugin();
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+  const defaultLayoutPluginInstance = defaultLayoutPlugin()
 
   useEffect(() => {
     if (file) {
-      const fileUrl = URL.createObjectURL(file);
-      setPdfUrl(fileUrl);
+      const fileUrl = URL.createObjectURL(file)
+      setPdfUrl(fileUrl)
 
-      return () => URL.revokeObjectURL(fileUrl);
+      return () => URL.revokeObjectURL(fileUrl)
     }
-  }, [file]);
+  }, [file])
 
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="4xl">
@@ -46,8 +45,13 @@ export function FilePreview({ isOpen, onClose, file }: FilePreviewProps) {
               justifyContent="center"
               alignItems="center"
             >
-              <Worker workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js`}>
-                <Viewer fileUrl={pdfUrl} plugins={[defaultLayoutPluginInstance]} />
+              <Worker
+                workerUrl={`https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.0.279/pdf.worker.min.js`}
+              >
+                <Viewer
+                  fileUrl={pdfUrl}
+                  plugins={[defaultLayoutPluginInstance]}
+                />
               </Worker>
             </Box>
           ) : (
@@ -61,11 +65,11 @@ export function FilePreview({ isOpen, onClose, file }: FilePreviewProps) {
                 <Text fontSize="xl" color="gray.500">
                   No PDF available for preview
                 </Text>
-              </Box>  
+              </Box>
             </Skeleton>
           )}
         </ModalBody>
       </ModalContent>
     </Modal>
-  );
+  )
 }

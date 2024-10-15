@@ -9,11 +9,13 @@ interface PrivateRouteProps {
 const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
   const { isLoggedIn, isLoading, user } = useAuth()
 
-  return <>
-  {isLoggedIn ? <>{element}</> :<Loader/> };
-  {!isLoggedIn && !user && isLoading && <Navigate to="/login" />};
-  {isLoading && <Loader/>}
-  </>
+  return (
+    <>
+      {isLoggedIn ? <>{element}</> : <Loader />};
+      {!isLoggedIn && !user && isLoading && <Navigate to="/login" />};
+      {isLoading && <Loader />}
+    </>
+  )
 }
 
 export default PrivateRoute

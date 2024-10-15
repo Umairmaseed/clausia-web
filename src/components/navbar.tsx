@@ -44,7 +44,7 @@ const Navbar = () => {
           Goprocess
         </Heading>
 
-        {isLoggedIn ?  (
+        {isLoggedIn ? (
           <HStack spacing={7}>
             <Menu>
               <MenuButton
@@ -145,8 +145,7 @@ const Navbar = () => {
               </MenuList>
             </Menu>
           </HStack>
-        ):
-        (
+        ) : (
           <HStack spacing={4}>
             {/* Common Links */}
             <Button
@@ -193,8 +192,7 @@ const Navbar = () => {
               {isLoginPage ? 'Register' : 'Login'}
             </Button>
           </HStack>
-        ) 
-         }
+        )}
       </Flex>
     </Box>
   )

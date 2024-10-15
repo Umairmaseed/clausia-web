@@ -25,7 +25,7 @@ import Loader from '../components/loader'
 
 const Login = () => {
   const navigate = useNavigate()
-  const {login, setLoading, isLoading } = useAuth()
+  const { login, setLoading, isLoading } = useAuth()
 
   const gridTemplateColumns = useBreakpointValue({
     base: '1fr',
@@ -54,7 +54,7 @@ const Login = () => {
         duration: 3000,
         isClosable: true,
       })
-      const response =  await UserService.infoUser()
+      const response = await UserService.infoUser()
       login(response)
       setLoading(false)
       navigate('/')
