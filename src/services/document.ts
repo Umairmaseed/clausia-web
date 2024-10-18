@@ -10,4 +10,22 @@ export const DocumentService = {
       })
       .then((res) => res.data)
   },
+  listDocument: async () => {
+    return api.get('listdocuments').then((res) => res.data)
+  },
+  listSuccessfulSignatures: async () => {
+    return api.get('listsuccessfulsignatures').then((res) => res.data)
+  },
+  downloadDocument: async (formData: any) => {
+    return api
+      .post('downloaddocument', formData, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        responseType: 'blob',
+      })
+      .then((res) => {
+        return res.data
+      })
+  },
 }
