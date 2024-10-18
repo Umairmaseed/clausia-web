@@ -195,7 +195,6 @@ const ListDocument = () => {
 
   return (
     <Box>
-      <Navbar />
       <VStack spacing={20} align="stretch" mx="auto" mt="20" width="95%">
         {/* Section 1: Uploaded Documents */}
         <Box p={5} borderRadius="md">

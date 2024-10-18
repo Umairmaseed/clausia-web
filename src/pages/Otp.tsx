@@ -94,7 +94,6 @@ const Otp = () => {
 
   return (
     <>
-      <Navbar />
       <Flex pt={20} pl={20}>
         <Box
           bg="white"

@@ -98,8 +98,6 @@ function CreateDocumentSigning() {
 
   return (
     <Box>
-      {/* Navbar */}
-      <Navbar />
       {/* Banner */}
       <Box textAlign="center" py={10}>
         <Heading fontSize="2xl" fontWeight="bold">

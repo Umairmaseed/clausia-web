@@ -78,7 +78,6 @@ const Login = () => {
 
   return (
     <>
-      <Navbar />
       <Center px={8} minH="100vh" minW="100vw" bg="gray.50">
         <Grid templateColumns={gridTemplateColumns} ml={10} w="full">
           <GridItem justifySelf={justifyForm}>

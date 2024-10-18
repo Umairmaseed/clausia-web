@@ -25,7 +25,6 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
       <Flex minH="100vh" pl={20}>
         {/* Sidebar */}
         <Box

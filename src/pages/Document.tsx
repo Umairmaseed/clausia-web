@@ -19,7 +19,6 @@ const Document = () => {
 
   return (
     <>
-      <Navbar />
       <Box bg="white" minH="100vh" p={4} px={20}>
         {/* Features Section */}
         <SimpleGrid

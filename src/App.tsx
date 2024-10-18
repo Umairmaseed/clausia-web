@@ -8,31 +8,34 @@ import Home from './pages/Home'
 import Document from './pages/Document'
 import CreateDocumentSigning from './pages/CreateDocumentSigning'
 import ListDocument from './pages/ListDocument'
+import Layout from './components/layout'
 
 function App() {
   return (
     <Router>
       <AuthProvider>
         <Routes>
-          {/* Public Routes */}
-          <Route path="/register" element={<Register />} />
-          <Route path="/otp" element={<Otp />} />
-          <Route path="/login" element={<Login />} />
+          <Route element={<Layout />}>
+            {/* Public Routes */}
+            <Route path="/register" element={<Register />} />
+            <Route path="/otp" element={<Otp />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* Protected Routes */}
-          <Route path="/" element={<PrivateRoute element={<Home />} />} />
-          <Route
-            path="/document"
-            element={<PrivateRoute element={<Document />} />}
-          />
-          <Route
-            path="/document/create"
-            element={<PrivateRoute element={<CreateDocumentSigning />} />}
-          />
-          <Route
-            path="/document/list"
-            element={<PrivateRoute element={<ListDocument />} />}
-          />
+            {/* Protected Routes */}
+            <Route path="/" element={<PrivateRoute element={<Home />} />} />
+            <Route
+              path="/document"
+              element={<PrivateRoute element={<Document />} />}
+            />
+            <Route
+              path="/document/create"
+              element={<PrivateRoute element={<CreateDocumentSigning />} />}
+            />
+            <Route
+              path="/document/list"
+              element={<PrivateRoute element={<ListDocument />} />}
+            />
+          </Route>
         </Routes>
       </AuthProvider>
     </Router>
