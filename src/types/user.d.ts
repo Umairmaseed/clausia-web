@@ -11,3 +11,8 @@ interface ConfirmUser {
   email?: string
   id?: string
 }
+
+interface UserKey {
+  '@assetType': 'user'
+  '@key': string
+}
