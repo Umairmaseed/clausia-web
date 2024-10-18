@@ -7,6 +7,7 @@ import PrivateRoute from './context/PrivateRoute'
 import Home from './pages/Home'
 import Document from './pages/Document'
 import CreateDocumentSigning from './pages/CreateDocumentSigning'
+import ListDocument from './pages/ListDocument'
 
 function App() {
   return (
@@ -27,6 +28,10 @@ function App() {
           <Route
             path="/document/create"
             element={<PrivateRoute element={<CreateDocumentSigning />} />}
+          />
+          <Route
+            path="/document/list"
+            element={<PrivateRoute element={<ListDocument />} />}
           />
         </Routes>
       </AuthProvider>
