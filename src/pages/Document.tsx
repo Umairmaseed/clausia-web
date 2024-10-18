@@ -12,8 +12,11 @@ import {
 import { CheckCircleIcon } from '@chakra-ui/icons'
 import Navbar from '../components/navbar'
 import { DragAndDrop } from '../components/drag&Drop'
+import { useNavigate } from 'react-router-dom'
 
 const Document = () => {
+  const Navigate = useNavigate()
+
   return (
     <>
       <Navbar />
@@ -69,7 +72,12 @@ const Document = () => {
               Access and view all your previously uploaded and signed documents.
               You can also download them.
             </Text>
-            <Button colorScheme="orange" size="md" variant="outline">
+            <Button
+              colorScheme="orange"
+              size="md"
+              variant="outline"
+              onClick={() => Navigate('/document/list')}
+            >
               View Documents
             </Button>
           </Box>
