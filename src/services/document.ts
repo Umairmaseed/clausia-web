@@ -28,4 +28,7 @@ export const DocumentService = {
         return res.data
       })
   },
+  getDocument: async (id: string) => {
+    return api.get(`getdocument?key=${id}`).then((res) => res.data)
+  },
 }
