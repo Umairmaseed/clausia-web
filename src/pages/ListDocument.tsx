@@ -23,16 +23,20 @@ import {
 } from '@chakra-ui/react'
 import { ViewIcon, DownloadIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
-import Navbar from '../components/navbar'
 import { returnDocumentStatus } from '../utils/returnDocumentStatus'
 import { useQuery } from '@tanstack/react-query'
 import { DocumentService } from '../services/document'
 import { useAuth } from '../context/Authcontext'
 import { FilePreview } from '../components/FileViewer'
+import {
+  fetchAndDownloadDocument,
+  fetchAndViewDocument,
+} from '../utils/viewOrDownloadDocument'
+import { useNavigate } from 'react-router-dom'
 
 const ListDocument = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [selectedSigners, setSelectedSigners] = useState<UserKey[]>([])
+  const [selectedSigners, setSelectedSigners] = useState<UserWithKey[]>([])
   const [signerType, setSignerType] = useState('')
   const [documents, setDocuments] = useState<Document[]>([])
   const [signedDocuments, setSignedDocuments] = useState<Document[]>([])
@@ -40,6 +44,7 @@ const ListDocument = () => {
   const [file, setFile] = useState<File | null>(null)
   const { setLoading } = useAuth()
   const toast = useToast()
+  const navigate = useNavigate()
 
   const checkStatus = returnDocumentStatus
 
@@ -110,33 +115,16 @@ const ListDocument = () => {
     }
   }, [signaturesLoading, signaturesData, signaturesError])
 
-  const handleOpenModal = (signers: UserKey[], type: string) => {
+  const handleOpenModal = (signers: UserWithKey[], type: string) => {
     setSelectedSigners(signers)
     setSignerType(type)
     onOpen()
   }
 
-  const fetchAndViewDocument = async (doc: Document) => {
-    const formData = new FormData()
+  const getAndViewDocument = async (doc: Document) => {
     setLoading(true)
-    if (doc.finalDocURL) {
-      formData.append('finalurl', doc.finalDocURL)
-    } else {
-      formData.append('originalurl', doc.originalDocURL)
-    }
-
-    try {
-      const response = await DocumentService.downloadDocument(formData)
-      if (response) {
-        const blob = new Blob([response], { type: 'application/octet-stream' })
-        const fetchedFile = new File([blob], `${doc.name}.pdf`, {
-          type: blob.type,
-        })
-
-        setFile(fetchedFile)
-        setViewDocument(true)
-      }
-    } catch (error) {
+    const file = await fetchAndViewDocument(doc)
+    if (file == null) {
       toast({
         title: 'Error',
         description: 'An error occurred while fetching the document',
@@ -144,46 +132,18 @@ const ListDocument = () => {
         duration: 3000,
         isClosable: true,
       })
-    } finally {
       setLoading(false)
+      return
     }
+    setFile(file)
+    setViewDocument(true)
+    setLoading(false)
   }
 
-  const fetchAndDownloadDocument = async (doc: Document) => {
+  const getAndDownloadDocument = async (doc: Document) => {
     setLoading(true)
-    const formData = new FormData()
-
-    if (doc.finalDocURL) {
-      formData.append('finalurl', doc.finalDocURL)
-    } else {
-      formData.append('originalurl', doc.originalDocURL)
-    }
-
-    try {
-      const response = await DocumentService.downloadDocument(formData)
-      if (response) {
-        const blob = new Blob([response], { type: 'application/octet-stream' })
-        const url = window.URL.createObjectURL(blob)
-
-        const link = document.createElement('a')
-        link.href = url
-        link.setAttribute('download', doc.name || 'download')
-        document.body.appendChild(link)
-        link.click()
-        link.remove()
-        window.URL.revokeObjectURL(url)
-      }
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'An error occurred while fetching the document',
-        status: 'error',
-        duration: 3000,
-        isClosable: true,
-      })
-    } finally {
-      setLoading(false)
-    }
+    await fetchAndDownloadDocument(doc)
+    setLoading(false)
   }
 
   const closeDocumentModel = () => {
@@ -191,6 +151,10 @@ const ListDocument = () => {
     setViewDocument(false)
     setFile(null)
     setLoading(false)
+  }
+
+  const navigateToDetailPage = (doc: Document) => {
+    navigate('/document/detail', { state: { docKey: doc['@key'] } })
   }
 
   return (
@@ -228,7 +192,7 @@ const ListDocument = () => {
                       {doc.name}
                     </Td>
                     <Td
-                      color={doc.status === 3 ? 'green.500' : 'orange.500'}
+                      color={doc.status === 3 ? 'green.500' : 'yellow.500'}
                       fontWeight="bold"
                     >
                       {checkStatus(doc.status)}
@@ -331,19 +295,32 @@ const ListDocument = () => {
                     >
                       {checkTimeout(doc.timeout)}
                     </Td>
-                    <Td display="flex" alignItems="center">
+                    <Td
+                      display="flex"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      width="100%"
+                    >
                       <Button
                         colorScheme="blue"
                         size="sm"
-                        onClick={() => fetchAndViewDocument(doc)}
+                        onClick={() => getAndViewDocument(doc)}
                       >
                         View
+                      </Button>
+                      <Button
+                        colorScheme="blue"
+                        size="sm"
+                        onClick={() => navigateToDetailPage(doc)}
+                        ml={2}
+                      >
+                        Details
                       </Button>
                       <Icon
                         as={DownloadIcon}
                         ml={4}
-                        onClick={() => fetchAndDownloadDocument(doc)}
-                        aria-label="View full list"
+                        onClick={() => getAndDownloadDocument(doc)}
+                        aria-label="download pdf"
                         cursor="pointer"
                         _hover={{
                           color: 'blue.500',
@@ -400,7 +377,7 @@ const ListDocument = () => {
                       <Button
                         colorScheme="blue"
                         size="sm"
-                        onClick={() => fetchAndViewDocument(doc)}
+                        onClick={() => getAndViewDocument(doc)}
                       >
                         View Document
                       </Button>
