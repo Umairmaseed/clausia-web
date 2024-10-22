@@ -9,6 +9,7 @@ import Document from './pages/Document'
 import CreateDocumentSigning from './pages/CreateDocumentSigning'
 import ListDocument from './pages/ListDocument'
 import Layout from './components/layout'
+import DocumentDetail from './pages/DocumentDetail'
 
 function App() {
   return (
@@ -34,6 +35,10 @@ function App() {
             <Route
               path="/document/list"
               element={<PrivateRoute element={<ListDocument />} />}
+            />
+            <Route
+              path="/document/detail"
+              element={<PrivateRoute element={<DocumentDetail />} />}
             />
           </Route>
         </Routes>
