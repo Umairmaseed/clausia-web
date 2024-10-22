@@ -13,10 +13,10 @@ interface Document {
   originalDocURL: string
   originalHash: string
   finalDocURL?: string
-  owner: UserSignature
-  rejectedSignatures: UserKey[]
-  requiredSignatures: UserKey[]
+  owner: UserWithKey
+  rejectedSignatures: UserWithKey[]
+  requiredSignatures: UserWithKey[]
   status: number
-  successfulSignatures: UserKey[]
+  successfulSignatures: UserWithKey[]
   timeout: string
 }

@@ -12,7 +12,12 @@ interface ConfirmUser {
   id?: string
 }
 
-interface UserKey {
+interface UserWithKey {
   '@assetType': 'user'
   '@key': string
+  name: string
+  email: string
+  phone: string
+  cpf: string
+  username: string
 }
