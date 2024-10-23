@@ -145,8 +145,8 @@ const PendingSignatures: React.FC = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader borderBottomWidth="1px">
-            {selectedDoc?.title || 'Document Details'}
+          <DrawerHeader  borderBottomWidth="1px">
+            Pending Signatures Document
           </DrawerHeader>
 
           <DrawerBody mt={10}>
