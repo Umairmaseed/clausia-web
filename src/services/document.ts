@@ -31,4 +31,7 @@ export const DocumentService = {
   getDocument: async (id: string) => {
     return api.get(`getdocument?key=${id}`).then((res) => res.data)
   },
+  getPendingSignaturesDoc: async (status: number) => {
+    return api.get(`pendingsignatures?status=${status}`).then((res) => res.data)
+  },
 }
