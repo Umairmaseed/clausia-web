@@ -10,6 +10,7 @@ import CreateDocumentSigning from './pages/CreateDocumentSigning'
 import ListDocument from './pages/ListDocument'
 import Layout from './components/layout'
 import DocumentDetail from './pages/DocumentDetail'
+import PendingSignatures from './pages/ListPendingSignatures'
 
 function App() {
   return (
@@ -39,6 +40,10 @@ function App() {
             <Route
               path="/document/detail"
               element={<PrivateRoute element={<DocumentDetail />} />}
+            />
+            <Route
+              path="/document/pending"
+              element={<PrivateRoute element={<PendingSignatures />} />}
             />
           </Route>
         </Routes>

@@ -90,9 +90,8 @@ const ListDocument = () => {
         setLoading(false)
       } else if (data['documents']) {
         setDocuments(data['documents'])
-        setLoading(false)
+      setLoading(false)
       }
-      setLoading(true)
     }
   }, [queryLoading, data, error])
 

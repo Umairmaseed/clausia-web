@@ -97,7 +97,14 @@ const Document = () => {
               Documents that are waiting for your signature. Review and sign
               them.
             </Text>
-            <Button colorScheme="orange" variant="outline" size="md">
+            <Button
+              colorScheme="orange"
+              variant="outline"
+              size="md"
+              onClick={() => {
+                Navigate('/document/pending')
+              }}
+            >
               Pending Documents
             </Button>
           </Box>

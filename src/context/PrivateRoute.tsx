@@ -11,8 +11,8 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element }) => {
 
   return (
     <>
-      {isLoggedIn ? <>{element}</> : <Loader />};
-      {!isLoggedIn && !user && isLoading && <Navigate to="/login" />};
+      {isLoggedIn ? <>{element}</> : <Loader />}
+      {!isLoggedIn && !user && isLoading && <Navigate to="/login" />}
       {isLoading && <Loader />}
     </>
   )
