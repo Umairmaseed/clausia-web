@@ -1,0 +1,47 @@
+/* Pdf viewer scroll bar removed */
+.rpv-core__inner-pages {
+  overflow: hidden !important;
+}
+
+.rpv-core__minimal-button {
+  background: #ffffff !important;
+  border: rgb(176, 176, 209) 1px solid !important;
+  border-radius: 0.5rem;
+  color: #8383ad !important;
+  cursor: pointer;
+  height: 1.5rem !important;
+  padding: 0 0.5rem !important;
+  font-weight: bold;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.rpv-core__icon {
+  height: 8px;
+  width: 8px;
+}
+
+.rpv-core__minimal-button:hover {
+  box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.2);
+  transform: scale(1.05);
+}
+
+.rpv-core__minimal-button:active {
+  transform: scale(1);
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+.rpv-core__canvas-layer {
+  height: 120vh !important;
+  /* width: 800px !important; */
+  overflow: hidden !important;
+}
+.rpv-core__inner-page--single {
+  height: auto !important;
+  /* width: auto !important; */
+  overflow: hidden !important;
+}
+.pdf-signing {
+  height: 120vh !important;
+  /* width: 800px !important; */
+}
