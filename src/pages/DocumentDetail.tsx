@@ -85,7 +85,7 @@ const DocumentDetail = () => {
   }
 
   return (
-    <Box display="flex" p={20} width="100%" pt={10} bg="gray.50">
+    <Box display="flex" p={20} width="100%" pt={10}>
       {/* Left side: Document details */}
       <Box width="60%" p={5}>
         <VStack align="start" spacing={4}>
@@ -172,19 +172,11 @@ const DocumentDetail = () => {
               </GridItem>
             </Grid>
           )}
-          {/* Document History */}
-          <Heading size="lg" my={10} color="blue.500">
-            Document History
-          </Heading>
-          <Grid templateColumns="150px 1fr" gap={4} width="100%"></Grid>
         </VStack>
       </Box>
 
       {/* Right side: Document preview */}
       <Box width="35%" p={5}>
-        <Text fontSize="lg" fontWeight="bold" mb={5}>
-          Current state of document :{' '}
-        </Text>
         <FilePreview
           file={file}
           isOpen={true}
