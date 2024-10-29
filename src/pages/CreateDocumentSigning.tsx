@@ -10,7 +10,6 @@ import {
   GridItem,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
-import Navbar from '../components/navbar'
 import { DragAndDrop } from '../components/drag&Drop'
 import { useLocation } from 'react-router-dom'
 import { FilePreview } from '../components/FileViewer'
@@ -20,6 +19,7 @@ import { useNavigate } from 'react-router-dom'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { formatISO } from 'date-fns'
+import { useAuth } from '../context/Authcontext'
 
 function CreateDocumentSigning() {
   const location = useLocation()
@@ -28,6 +28,7 @@ function CreateDocumentSigning() {
   const [file, setFile] = useState<File | null>(null)
   const [signers, setSigners] = useState<string[]>([])
   const [calendarOpen, setCalendarOpen] = useState(true)
+  const { setLoading } = useAuth()
 
   const [timeoutDate, setTimeoutDate] = useState<Date>(() => {
     const date = new Date()
@@ -73,6 +74,7 @@ function CreateDocumentSigning() {
   }
 
   const submitDocument = async () => {
+    setLoading(true)
     const formData = new FormData()
 
     if (file) {
@@ -82,7 +84,7 @@ function CreateDocumentSigning() {
     formData.append('requiredSignatures', signers.join(','))
     formData.append('timeout', formatISO(timeoutDate))
     try {
-      const response = await DocumentService.createDocument(formData)
+      await DocumentService.createDocument(formData)
       toast({
         title: 'Document created successfully',
         status: 'success',
@@ -93,6 +95,8 @@ function CreateDocumentSigning() {
         title: 'Failed to create document',
         status: 'error',
       })
+    } finally {
+      setLoading(false)
     }
   }
 
