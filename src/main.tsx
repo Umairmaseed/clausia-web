@@ -5,8 +5,8 @@ import { ChakraProvider } from '@chakra-ui/react'
 import theme from './style/theme.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import './style/date-picker.css'
+import './style/pdf.css'
 import '@react-pdf-viewer/core/lib/styles/index.css'
-import '@react-pdf-viewer/default-layout/lib/styles/index.css'
 
 const queryClient = new QueryClient()
 
