@@ -20,3 +20,25 @@ interface Document {
   successfulSignatures: UserWithKey[]
   timeout: string
 }
+
+interface DocumentSignature {
+  rect: {
+    x: number
+    y: number
+    page: number
+  }
+  final: boolean
+}
+
+interface SignatureObject {
+  [key: string]: DocumentSignature
+}
+
+interface Signature {
+  password: string
+  signature: string
+  username: string
+  cpf: string
+  dockey: string
+  rejectsignature: boolean
+}
