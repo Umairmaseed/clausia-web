@@ -34,4 +34,7 @@ export const DocumentService = {
   getPendingSignaturesDoc: async (status: number) => {
     return api.get(`pendingsignatures?status=${status}`).then((res) => res.data)
   },
+  putSignature: async (req: Signature) => {
+    return api.post('signdocument', req).then((res) => res.data)
+  },
 }
