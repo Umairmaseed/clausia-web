@@ -20,6 +20,7 @@ import {
   List,
   ListItem,
   useToast,
+  Flex,
 } from '@chakra-ui/react'
 import { ViewIcon, DownloadIcon } from '@chakra-ui/icons'
 import { useState, useEffect } from 'react'
@@ -90,8 +91,9 @@ const ListDocument = () => {
         setLoading(false)
       } else if (data['documents']) {
         setDocuments(data['documents'])
-      setLoading(false)
+        setLoading(false)
       }
+      setLoading(false)
     }
   }, [queryLoading, data, error])
 
@@ -294,40 +296,42 @@ const ListDocument = () => {
                     >
                       {checkTimeout(doc.timeout)}
                     </Td>
-                    <Td
-                      display="flex"
-                      alignItems="center"
-                      justifyContent="space-between"
-                      width="100%"
-                    >
-                      <Button
-                        colorScheme="blue"
-                        size="sm"
-                        onClick={() => getAndViewDocument(doc)}
+                    <Td>
+                      <Flex
+                        display="flex"
+                        alignItems="center"
+                        justifyContent="space-between"
+                        width="100%"
                       >
-                        View
-                      </Button>
-                      <Button
-                        colorScheme="blue"
-                        size="sm"
-                        onClick={() => navigateToDetailPage(doc)}
-                        ml={2}
-                      >
-                        Details
-                      </Button>
-                      <Icon
-                        as={DownloadIcon}
-                        ml={4}
-                        onClick={() => getAndDownloadDocument(doc)}
-                        aria-label="download pdf"
-                        cursor="pointer"
-                        _hover={{
-                          color: 'blue.500',
-                          transform: 'scale(1.1)',
-                        }}
-                        transition="transform 0.2s ease, color 0.2s ease"
-                        color="gray.400"
-                      />
+                        <Button
+                          colorScheme="blue"
+                          size="sm"
+                          onClick={() => getAndViewDocument(doc)}
+                        >
+                          View
+                        </Button>
+                        <Button
+                          colorScheme="blue"
+                          size="sm"
+                          onClick={() => navigateToDetailPage(doc)}
+                          ml={2}
+                        >
+                          Details
+                        </Button>
+                        <Icon
+                          as={DownloadIcon}
+                          ml={4}
+                          onClick={() => getAndDownloadDocument(doc)}
+                          aria-label="download pdf"
+                          cursor="pointer"
+                          _hover={{
+                            color: 'blue.500',
+                            transform: 'scale(1.1)',
+                          }}
+                          transition="transform 0.2s ease, color 0.2s ease"
+                          color="gray.400"
+                        />
+                      </Flex>
                     </Td>
                   </Tr>
                 ))}
@@ -364,14 +368,81 @@ const ListDocument = () => {
                     >
                       {doc.name}
                     </Td>
-                    <Td>{doc.status}</Td>
+                    <Td
+                      color={doc.status === 3 ? 'green.500' : 'yellow.500'}
+                      fontWeight="bold"
+                    >
+                      {checkStatus(doc.status)}
+                    </Td>
                     <Td>
                       {new Date(doc['@lastUpdated']).toLocaleDateString()}
                     </Td>
-                    <Td>{doc.requiredSignatures.join(', ')}</Td>
-                    <Td></Td>
-                    <Td></Td>
-                    <Td></Td>
+                    <Td>
+                      {doc.successfulSignatures.length > 0 &&
+                        doc.successfulSignatures?.[0]['@key']}
+                      {doc.successfulSignatures.length >= 2 && (
+                        <>
+                          {' '}
+                          ...{' '}
+                          <Icon
+                            as={ViewIcon}
+                            ml={4}
+                            onClick={() =>
+                              handleOpenModal(
+                                doc.successfulSignatures,
+                                'Rejected Signatures'
+                              )
+                            }
+                            aria-label="View full list"
+                            cursor="pointer"
+                            _hover={{
+                              color: 'blue.500',
+                              transform: 'scale(1.1)',
+                            }}
+                            transition="transform 0.2s ease, color 0.2s ease"
+                            color="gray.400"
+                          />
+                        </>
+                      )}
+                    </Td>
+                    <Td>
+                      {doc.rejectedSignatures.length > 0 &&
+                        doc.rejectedSignatures?.[0]['@key']}
+                      {doc.rejectedSignatures.length >= 2 && (
+                        <>
+                          {' '}
+                          ...{' '}
+                          <Icon
+                            as={ViewIcon}
+                            ml={4}
+                            onClick={() =>
+                              handleOpenModal(
+                                doc.rejectedSignatures,
+                                'Rejected Signatures'
+                              )
+                            }
+                            aria-label="View full list"
+                            cursor="pointer"
+                            _hover={{
+                              color: 'blue.500',
+                              transform: 'scale(1.1)',
+                            }}
+                            transition="transform 0.2s ease, color 0.2s ease"
+                            color="gray.400"
+                          />
+                        </>
+                      )}
+                    </Td>
+                    <Td
+                      fontWeight="bold"
+                      color={
+                        checkTimeout(doc.timeout) === 'Active'
+                          ? 'green.500'
+                          : 'red.500'
+                      }
+                    >
+                      {checkTimeout(doc.timeout)}
+                    </Td>
                     <Td>
                       <Button
                         colorScheme="blue"
