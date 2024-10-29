@@ -22,6 +22,7 @@ import { useQuery } from '@tanstack/react-query'
 import { DocumentService } from '../services/document'
 import { useAuth } from '../context/Authcontext'
 import { getTimeLeft } from '../utils/returnPendingTime'
+import { useNavigate } from 'react-router-dom'
 
 const PendingSignatures: React.FC = () => {
   const [pendingSignatures, setPendingSignatures] = useState<Document[] | null>(
@@ -29,6 +30,7 @@ const PendingSignatures: React.FC = () => {
   )
   const toast = useToast()
   const { setLoading } = useAuth()
+  const navigate = useNavigate()
 
   const {
     data,
@@ -41,19 +43,22 @@ const PendingSignatures: React.FC = () => {
 
   useEffect(() => {
     setLoading(true)
-    if (error) {
-      toast({
-        title: 'An error occurred.',
-        description: 'Unable to fetch pending signatures',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      })
-    setLoading(false)
-    }
-    if (data && data['documents']) {
-      setPendingSignatures(data['documents'])
-    setLoading(false)
+    if (!queryLoading) {
+      if (error) {
+        toast({
+          title: 'An error occurred.',
+          description: 'Unable to fetch pending signatures',
+          status: 'error',
+          duration: 9000,
+          isClosable: true,
+        })
+        setLoading(false)
+      }
+      if (data && data['documents']) {
+        setPendingSignatures(data['documents'])
+        setLoading(false)
+      }
+      setLoading(false)
     }
   }, [error, data, queryLoading])
 
@@ -63,6 +68,10 @@ const PendingSignatures: React.FC = () => {
   const handleClick = (doc: Document) => {
     setSelectedDoc(doc)
     onOpen()
+  }
+
+  const navigateToSigning = (doc: Document) => {
+    navigate('/document/sign', { state: { document: doc } })
   }
 
   return (
@@ -80,7 +89,7 @@ const PendingSignatures: React.FC = () => {
                   key={doc['@key']}
                   borderRadius="md"
                   bg="white"
-                  p={8}
+                  p={6}
                   py={4}
                   border="1px solid"
                   borderColor="gray.200"
@@ -89,7 +98,7 @@ const PendingSignatures: React.FC = () => {
                     <Heading
                       fontWeight="bold"
                       size="md"
-                      color="orange.400"
+                      color="gray.500"
                       mb={6}
                     >
                       {doc.name}
@@ -99,37 +108,42 @@ const PendingSignatures: React.FC = () => {
                       justifyContent="space-between"
                       w="100%"
                     >
-                      <Text>
-                        Requested by:
-                        <Text
-                          as="span"
-                          color="green.500"
-                          bg="green.100"
-                          px={2}
-                          py={1}
-                          borderRadius="md"
-                          fontWeight="bold"
-                          ml={3}
-                        >
-                          {doc.owner.name}
+                      <Flex>
+                        <Text fontWeight="bold">
+                          Requested by:
+                          <Text
+                            as="span"
+                            color="green.500"
+                            bg="green.100"
+                            px={2}
+                            py={1}
+                            borderRadius="md"
+                            mx={3}
+                          >
+                            {doc.owner.name}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Text>
-                        Due in:
-                        <Text
-                          as="span"
-                          color="gray.500"
-                          bg="gray.100"
-                          px={2}
-                          py={1}
-                          borderRadius="md"
-                          fontWeight="bold"
-                          ml={3}
-                        >
-                          {getTimeLeft(doc.timeout)}
+                        <Text fontWeight="bold">
+                          Due in:
+                          <Text
+                            as="span"
+                            color="orange.500"
+                            bg="orange.100"
+                            px={2}
+                            py={1}
+                            borderRadius="md"
+                            fontWeight="bold"
+                            ml={3}
+                          >
+                            {getTimeLeft(doc.timeout)}
+                          </Text>
                         </Text>
-                      </Text>
-                      <Button onClick={() => handleClick(doc)} size="sm">
+                      </Flex>
+                      <Button
+                        onClick={() => handleClick(doc)}
+                        variant="outline"
+                        size="sm"
+                      >
                         View Details
                       </Button>
                     </Flex>
@@ -145,7 +159,7 @@ const PendingSignatures: React.FC = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader  borderBottomWidth="1px">
+          <DrawerHeader borderBottomWidth="1px">
             Pending Signatures Document
           </DrawerHeader>
 
@@ -170,10 +184,20 @@ const PendingSignatures: React.FC = () => {
           </DrawerBody>
 
           <DrawerFooter borderTopWidth="1px">
-            <Button variant="outline" size='md' mr={3} onClick={onClose}>
+            <Button variant="outline" size="md" mr={3} onClick={onClose}>
               Close
             </Button>
-            {getTimeLeft(selectedDoc?.timeout) != "expired" && <Button size='md' colorScheme="blue">Proceed with Signing</Button>}
+            {getTimeLeft(selectedDoc?.timeout) != 'expired' && (
+              <Button
+                size="md"
+                colorScheme="blue"
+                onClick={() => {
+                  selectedDoc && navigateToSigning(selectedDoc)
+                }}
+              >
+                Proceed with Signing
+              </Button>
+            )}
           </DrawerFooter>
         </DrawerContent>
       </Drawer>
