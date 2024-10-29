@@ -15,7 +15,7 @@ export const UserService = {
       .get<{
         id: string
         name: string
-        username: string
+        userName: string
         email: string
         phone: string
         cpf: string
@@ -29,5 +29,8 @@ export const UserService = {
   },
   logoutUser: async () => {
     return api.post('logout').then((res) => res.data)
+  },
+  confirmPassword: async (userDetails: LoginUser) => {
+    return api.post('checkpw', userDetails).then((res) => res)
   },
 }
