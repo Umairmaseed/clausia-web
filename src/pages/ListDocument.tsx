@@ -201,10 +201,10 @@ const ListDocument = () => {
                     <Td>
                       {new Date(doc['@lastUpdated']).toLocaleDateString()}
                     </Td>
-                    <Td>{doc.owner['@key']}</Td>
+                    <Td>{doc.owner.name}</Td>
                     <Td>
                       {doc.requiredSignatures.length > 0 &&
-                        doc.requiredSignatures?.[0]['@key']}
+                        doc.requiredSignatures?.[0].name}
                       {doc.requiredSignatures.length >= 2 && (
                         <>
                           {' '}
@@ -232,7 +232,7 @@ const ListDocument = () => {
                     </Td>
                     <Td>
                       {doc.rejectedSignatures.length > 0 &&
-                        doc.rejectedSignatures?.[0]['@key']}
+                        doc.rejectedSignatures?.[0].name}
                       {doc.rejectedSignatures.length >= 2 && (
                         <>
                           {' '}
@@ -260,7 +260,7 @@ const ListDocument = () => {
                     </Td>
                     <Td>
                       {doc.successfulSignatures.length > 0 &&
-                        doc.successfulSignatures?.[0]['@key']}
+                        doc.successfulSignatures?.[0].name}
                       {doc.successfulSignatures.length >= 2 && (
                         <>
                           {' '}
@@ -379,7 +379,7 @@ const ListDocument = () => {
                     </Td>
                     <Td>
                       {doc.successfulSignatures.length > 0 &&
-                        doc.successfulSignatures?.[0]['@key']}
+                        doc.successfulSignatures?.[0].name}
                       {doc.successfulSignatures.length >= 2 && (
                         <>
                           {' '}
@@ -407,7 +407,7 @@ const ListDocument = () => {
                     </Td>
                     <Td>
                       {doc.rejectedSignatures.length > 0 &&
-                        doc.rejectedSignatures?.[0]['@key']}
+                        doc.rejectedSignatures?.[0].name}
                       {doc.rejectedSignatures.length >= 2 && (
                         <>
                           {' '}
@@ -478,7 +478,7 @@ const ListDocument = () => {
             <List spacing={3}>
               {selectedSigners.length > 0 &&
                 selectedSigners.map((signer, index) => (
-                  <ListItem key={index}>{signer['@key']}</ListItem>
+                  <ListItem key={index}>{signer.name}</ListItem>
                 ))}
             </List>
           </ModalBody>

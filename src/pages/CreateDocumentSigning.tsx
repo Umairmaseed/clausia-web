@@ -24,8 +24,8 @@ import { useAuth } from '../context/Authcontext'
 function CreateDocumentSigning() {
   const location = useLocation()
   const [activeStep, setActiveStep] = useState(1)
-  const [viewFile, setViewFile] = useState(false)
   const [file, setFile] = useState<File | null>(null)
+  const [signersId, setSignersId] = useState<string[]>([])
   const [signers, setSigners] = useState<string[]>([])
   const [calendarOpen, setCalendarOpen] = useState(true)
   const { setLoading } = useAuth()
@@ -37,11 +37,6 @@ function CreateDocumentSigning() {
   })
   const toast = useToast()
   const navigate = useNavigate()
-
-  const closeFileViewer = () => {
-    setActiveStep(3)
-    setViewFile(false)
-  }
 
   useEffect(() => {
     if (location.state && location.state.file) {
@@ -68,7 +63,8 @@ function CreateDocumentSigning() {
     }
   }
 
-  const submitSigners = (signers: string[]) => {
+  const submitSigners = (signersId: string[], signers : string[]) => {
+    setSignersId(signersId)
     setSigners(signers)
     handleNext()
   }
@@ -81,7 +77,7 @@ function CreateDocumentSigning() {
       formData.append('files', file)
     }
 
-    formData.append('requiredSignatures', signers.join(','))
+    formData.append('requiredSignatures', signersId.join(','))
     formData.append('timeout', formatISO(timeoutDate))
     try {
       await DocumentService.createDocument(formData)
@@ -129,6 +125,7 @@ function CreateDocumentSigning() {
 
               <Text
                 mt={2}
+                textAlign='center'
                 fontWeight={activeStep >= step.key ? 'bold' : 'normal'}
               >
                 {step.label}
@@ -147,31 +144,25 @@ function CreateDocumentSigning() {
           </Flex>
         )}
         {activeStep === 2 &&
-          signers.length === 0 &&
-          (viewFile ? (
+          signersId.length === 0 &&
             <Box>
               <FilePreview
-                isOpen={viewFile}
-                onClose={closeFileViewer}
+                isOpen={true}
+                onClose={()=>{}}
                 file={file}
+                useModal={false}
               />
-            </Box>
-          ) : (
-            <Box>
-              <Text fontSize="lg">
-                Step 2: Please Review the document before proceeding.
-              </Text>
               <Button
                 mt={4}
                 colorScheme="green"
                 onClick={() => {
-                  setViewFile(true)
+                  setActiveStep(3)
                 }}
               >
-                View Document
+                Next
               </Button>
             </Box>
-          ))}
+          }
         {activeStep === 3 && (
           <Box>
             <InviteSignerForm submitSigners={submitSigners} />
@@ -207,12 +198,13 @@ function CreateDocumentSigning() {
               onClick={() => {
                 handleNext()
               }}
+              size='sm'
             >
               Next
             </Button>
           </Flex>
         )}
-        {activeStep === 5 && signers.length > 0 && (
+        {activeStep === 5 && signersId.length > 0 && (
           <Box mb={4}>
             <Grid
               templateColumns="1fr 1fr"
@@ -238,7 +230,7 @@ function CreateDocumentSigning() {
 
               <GridItem>
                 <Text fontSize="md" fontWeight="bold">
-                  Signer IDs:
+                  Signer:
                 </Text>
               </GridItem>
               <GridItem justifySelf="flex-start">
@@ -248,7 +240,7 @@ function CreateDocumentSigning() {
                   fontWeight="bold"
                   color="orange.600"
                 >
-                  {signers.length > 0
+                  {signersId.length > 0
                     ? signers.join(', ')
                     : 'No signers invited'}
                 </Text>

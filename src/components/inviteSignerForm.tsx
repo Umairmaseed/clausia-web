@@ -22,7 +22,7 @@ import { useAuth } from '../context/Authcontext'
 import { UserService } from '../services/User'
 
 interface SignerFormProps {
-  submitSigners: (signers: string[]) => void
+  submitSigners: (signersId: string[],signers : string[]) => void
 }
 
 const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
@@ -127,7 +127,7 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
   }
 
   return (
-    <Box p={4} maxW="80%" mx="auto">
+    <Box p={4} maxW="60%" mx="auto">
       <Tabs isFitted variant="enclosed">
         <TabList mb="1em">
           <Tab
@@ -175,39 +175,54 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
           {/* Username Tab */}
           <TabPanel>
             <VStack spacing={4}>
-              <HStack>
-                <Input
-                  placeholder="Enter username"
-                  value={usernameInput}
-                  onChange={(e) => setUsernameInput(e.target.value)}
-                />
-                <IconButton
-                  icon={<AddIcon />}
-                  aria-label="Add Username"
-                  onClick={handleAddUsername}
-                />
-              </HStack>
-
               {/* List of Added Usernames */}
               <List spacing={3}>
                 {usernames.map((username, index) => (
                   <ListItem key={index}>
-                    <HStack justify="space-between">
+                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
                       <Box>{username}</Box>
                       <CloseButton
+                      size='sm'
                         onClick={() => handleRemoveUsername(index)}
                       />
                     </HStack>
                   </ListItem>
                 ))}
               </List>
+
+              <HStack mt={8}>
+                <Input
+                  placeholder="Enter username"
+                  value={usernameInput}
+                  onChange={(e) => setUsernameInput(e.target.value)}
+                />
+                <IconButton
+                size='sm'
+                  icon={<AddIcon />}
+                  aria-label="Add Username"
+                  onClick={handleAddUsername}
+                  colorScheme='orange'
+                />
+              </HStack>
             </VStack>
           </TabPanel>
 
           {/* Email Tab */}
           <TabPanel>
             <VStack spacing={4}>
-              <HStack>
+               {/* List of Added Emails */}
+               <List spacing={3}>
+                {emails.map((email, index) => (
+                  <ListItem key={index}>
+                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
+                      <Box>{email}</Box>
+                      <CloseButton onClick={() => handleRemoveEmail(index)} />
+                    </HStack>
+                  </ListItem>
+                ))}
+              </List>
+
+              <HStack mt={8}>
                 <Input
                   placeholder="Enter email"
                   value={emailInput}
@@ -219,25 +234,26 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
                   onClick={handleAddEmail}
                 />
               </HStack>
-
-              {/* List of Added Emails */}
-              <List spacing={3}>
-                {emails.map((email, index) => (
-                  <ListItem key={index}>
-                    <HStack justify="space-between">
-                      <Box>{email}</Box>
-                      <CloseButton onClick={() => handleRemoveEmail(index)} />
-                    </HStack>
-                  </ListItem>
-                ))}
-              </List>
             </VStack>
           </TabPanel>
 
           {/* ID Tab */}
           <TabPanel>
             <VStack spacing={4}>
-              <HStack>
+
+              {/* List of Added IDs */}
+              <List spacing={3}>
+                {ids.map((id, index) => (
+                  <ListItem key={index}>
+                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
+                      <Box>{id}</Box>
+                      <CloseButton onClick={() => handleRemoveId(index)} />
+                    </HStack>
+                  </ListItem>
+                ))}
+              </List>
+
+              <HStack mt={8}>
                 <Input
                   placeholder="Enter ID"
                   value={idInput}
@@ -249,18 +265,6 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
                   onClick={handleAddId}
                 />
               </HStack>
-
-              {/* List of Added IDs */}
-              <List spacing={3}>
-                {ids.map((id, index) => (
-                  <ListItem key={index}>
-                    <HStack justify="space-between">
-                      <Box>{id}</Box>
-                      <CloseButton onClick={() => handleRemoveId(index)} />
-                    </HStack>
-                  </ListItem>
-                ))}
-              </List>
             </VStack>
           </TabPanel>
         </TabPanels>
@@ -271,7 +275,12 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
         <Button
           colorScheme="blue"
           mt={4}
-          onClick={() => SignerForm.submitSigners(signerKeys)}
+          onClick={() => {
+            const signers = [...usernames,...emails,...ids]
+            SignerForm.submitSigners(signerKeys, signers)
+          }
+          }
+          size='sm'
         >
           Next
         </Button>
