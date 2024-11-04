@@ -8,6 +8,14 @@ import {
   useToast,
   Grid,
   GridItem,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+  ModalCloseButton,
+  Input,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react'
 import { DragAndDrop } from '../components/drag&Drop'
@@ -28,6 +36,8 @@ function CreateDocumentSigning() {
   const [signersId, setSignersId] = useState<string[]>([])
   const [signers, setSigners] = useState<string[]>([])
   const [calendarOpen, setCalendarOpen] = useState(true)
+  const [changeNameModel,setChangeNameModel] = useState(false)
+  const [changedName,setChangedName] = useState("")
   const { setLoading } = useAuth()
 
   const [timeoutDate, setTimeoutDate] = useState<Date>(() => {
@@ -95,6 +105,21 @@ function CreateDocumentSigning() {
       setLoading(false)
     }
   }
+
+  const updateFileName = (newName : string) => {
+    if (!file) return; 
+  
+    const fileExtension = file.name.split('.').pop();
+  
+    const updatedFile = new File([file], `${newName}.${fileExtension}`, {
+      type: file.type,
+      lastModified: file.lastModified,
+    });
+  
+    setFile(updatedFile); 
+  
+    setChangeNameModel(false);
+  };
 
   return (
     <Box>
@@ -218,14 +243,19 @@ function CreateDocumentSigning() {
                 </Text>
               </GridItem>
               <GridItem justifySelf="flex-start">
+                <Flex alignItems="center">
                 <Text
                   fontSize="md"
                   wordBreak="break-word"
                   fontWeight="bold"
-                  color="orange.600"
+                  color="gray.500"
                 >
                   {file ? file.name : 'No file uploaded'}
                 </Text>
+                <Button ml={4} size='sm' variant='ghost' colorScheme="orange" onClick={()=>{setChangeNameModel(true)}}>
+                  Change
+                </Button>
+                </Flex>
               </GridItem>
 
               <GridItem>
@@ -238,7 +268,7 @@ function CreateDocumentSigning() {
                   fontSize="md"
                   wordBreak="break-word"
                   fontWeight="bold"
-                  color="orange.600"
+                  color="gray.500"
                 >
                   {signersId.length > 0
                     ? signers.join(', ')
@@ -252,17 +282,50 @@ function CreateDocumentSigning() {
                 </Text>
               </GridItem>
               <GridItem justifySelf="flex-start">
-                <Text fontSize="md" fontWeight="bold" color="orange.600">
+                <Text fontSize="md" fontWeight="bold" color="gray.500">
                   {timeoutDate.toLocaleString()}
                 </Text>
               </GridItem>
             </Grid>
 
-            <Button mt={4} colorScheme="green" onClick={submitDocument}>
+            <Button mt={4} size='md' colorScheme="green" onClick={submitDocument}>
               Submit Document
             </Button>
           </Box>
         )}
+        <Modal isOpen={changeNameModel} onClose={() => setChangeNameModel(false)}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Change Name</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input
+              type={'text'}
+              placeholder="Enter new name"
+              value={changedName}
+              onChange={(e) => setChangedName(e.target.value)}
+              mb={4}
+            />
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setChangeNameModel(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              size="sm"
+              onClick={() => updateFileName(changedName)} 
+              >
+              Confirm
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
       </Box>
     </Box>
   )
