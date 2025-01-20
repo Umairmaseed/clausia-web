@@ -10,7 +10,6 @@ import {
   Link,
 } from '@chakra-ui/react'
 import { CheckCircleIcon } from '@chakra-ui/icons'
-import Navbar from '../components/navbar'
 import { DragAndDrop } from '../components/drag&Drop'
 import { useNavigate } from 'react-router-dom'
 
