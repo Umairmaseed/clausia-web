@@ -12,6 +12,7 @@ import Layout from './components/layout'
 import DocumentDetail from './pages/DocumentDetail'
 import PendingSignatures from './pages/ListPendingSignatures'
 import SignDocument from './pages/SignDocument'
+import Contract from './pages/ContractDashboard'
 
 function App() {
   return (
@@ -49,6 +50,10 @@ function App() {
             <Route
               path="/document/sign"
               element={<PrivateRoute element={<SignDocument />} />}
+            />
+            <Route
+              path="/contract"
+              element={<PrivateRoute element={<Contract />} />}
             />
           </Route>
         </Routes>
