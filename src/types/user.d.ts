@@ -21,3 +21,8 @@ interface UserWithKey {
   cpf: string
   username: string
 }
+
+interface UserKey {
+  '@assetType': 'user'
+  '@key': string
+}
