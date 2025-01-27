@@ -159,9 +159,9 @@ const SignDocument: React.FC = () => {
 
   return (
     <Flex alignItems="start" m={10} justifyContent="space-evenly">
-      <Box p={14} >
-        <VStack align="start" spacing={4} >
-        <Heading size="lg" mb={10} color="orange.500">
+      <Box p={14}>
+        <VStack align="start" spacing={4}>
+          <Heading size="lg" mb={10} color="orange.500">
             Document Details
           </Heading>
           {document && (
@@ -215,7 +215,7 @@ const SignDocument: React.FC = () => {
             </Grid>
           )}
         </VStack>
-        <Flex mt={20} justifyContent='end'>
+        <Flex mt={20} justifyContent="end">
           <Button
             colorScheme="red"
             size="sm"

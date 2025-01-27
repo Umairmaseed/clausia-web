@@ -22,7 +22,7 @@ import { useAuth } from '../context/Authcontext'
 import { UserService } from '../services/User'
 
 interface SignerFormProps {
-  submitSigners: (signersId: string[],signers : string[]) => void
+  submitSigners: (signersId: string[], signers: string[]) => void
 }
 
 const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
@@ -179,10 +179,18 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
               <List spacing={3}>
                 {usernames.map((username, index) => (
                   <ListItem key={index}>
-                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
+                    <HStack
+                      justify="space-between"
+                      color="orange.700"
+                      bg="orange.200"
+                      fontWeight="bold"
+                      p={1}
+                      px={2}
+                      borderRadius={8}
+                    >
                       <Box>{username}</Box>
                       <CloseButton
-                      size='sm'
+                        size="sm"
                         onClick={() => handleRemoveUsername(index)}
                       />
                     </HStack>
@@ -197,11 +205,11 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
                   onChange={(e) => setUsernameInput(e.target.value)}
                 />
                 <IconButton
-                size='sm'
+                  size="sm"
                   icon={<AddIcon />}
                   aria-label="Add Username"
                   onClick={handleAddUsername}
-                  colorScheme='orange'
+                  colorScheme="orange"
                 />
               </HStack>
             </VStack>
@@ -210,11 +218,19 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
           {/* Email Tab */}
           <TabPanel>
             <VStack spacing={4}>
-               {/* List of Added Emails */}
-               <List spacing={3}>
+              {/* List of Added Emails */}
+              <List spacing={3}>
                 {emails.map((email, index) => (
                   <ListItem key={index}>
-                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
+                    <HStack
+                      justify="space-between"
+                      color="orange.700"
+                      bg="orange.200"
+                      fontWeight="bold"
+                      p={1}
+                      px={2}
+                      borderRadius={8}
+                    >
                       <Box>{email}</Box>
                       <CloseButton onClick={() => handleRemoveEmail(index)} />
                     </HStack>
@@ -240,12 +256,19 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
           {/* ID Tab */}
           <TabPanel>
             <VStack spacing={4}>
-
               {/* List of Added IDs */}
               <List spacing={3}>
                 {ids.map((id, index) => (
                   <ListItem key={index}>
-                    <HStack justify="space-between" color='orange.700' bg='orange.200' fontWeight='bold' p={1} px={2} borderRadius={8}>
+                    <HStack
+                      justify="space-between"
+                      color="orange.700"
+                      bg="orange.200"
+                      fontWeight="bold"
+                      p={1}
+                      px={2}
+                      borderRadius={8}
+                    >
                       <Box>{id}</Box>
                       <CloseButton onClick={() => handleRemoveId(index)} />
                     </HStack>
@@ -276,11 +299,10 @@ const InviteSignerForm: React.FC<SignerFormProps> = (SignerForm) => {
           colorScheme="blue"
           mt={4}
           onClick={() => {
-            const signers = [...usernames,...emails,...ids]
+            const signers = [...usernames, ...emails, ...ids]
             SignerForm.submitSigners(signerKeys, signers)
-          }
-          }
-          size='sm'
+          }}
+          size="sm"
         >
           Next
         </Button>

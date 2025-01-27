@@ -36,8 +36,8 @@ function CreateDocumentSigning() {
   const [signersId, setSignersId] = useState<string[]>([])
   const [signers, setSigners] = useState<string[]>([])
   const [calendarOpen, setCalendarOpen] = useState(true)
-  const [changeNameModel,setChangeNameModel] = useState(false)
-  const [changedName,setChangedName] = useState("")
+  const [changeNameModel, setChangeNameModel] = useState(false)
+  const [changedName, setChangedName] = useState('')
   const { setLoading } = useAuth()
 
   const [timeoutDate, setTimeoutDate] = useState<Date>(() => {
@@ -73,7 +73,7 @@ function CreateDocumentSigning() {
     }
   }
 
-  const submitSigners = (signersId: string[], signers : string[]) => {
+  const submitSigners = (signersId: string[], signers: string[]) => {
     setSignersId(signersId)
     setSigners(signers)
     handleNext()
@@ -106,20 +106,20 @@ function CreateDocumentSigning() {
     }
   }
 
-  const updateFileName = (newName : string) => {
-    if (!file) return; 
-  
-    const fileExtension = file.name.split('.').pop();
-  
+  const updateFileName = (newName: string) => {
+    if (!file) return
+
+    const fileExtension = file.name.split('.').pop()
+
     const updatedFile = new File([file], `${newName}.${fileExtension}`, {
       type: file.type,
       lastModified: file.lastModified,
-    });
-  
-    setFile(updatedFile); 
-  
-    setChangeNameModel(false);
-  };
+    })
+
+    setFile(updatedFile)
+
+    setChangeNameModel(false)
+  }
 
   return (
     <Box>
@@ -150,7 +150,7 @@ function CreateDocumentSigning() {
 
               <Text
                 mt={2}
-                textAlign='center'
+                textAlign="center"
                 fontWeight={activeStep >= step.key ? 'bold' : 'normal'}
               >
                 {step.label}
@@ -168,26 +168,25 @@ function CreateDocumentSigning() {
             <DragAndDrop />
           </Flex>
         )}
-        {activeStep === 2 &&
-          signersId.length === 0 &&
-            <Box>
-              <FilePreview
-                isOpen={true}
-                onClose={()=>{}}
-                file={file}
-                useModal={false}
-              />
-              <Button
-                mt={4}
-                colorScheme="green"
-                onClick={() => {
-                  setActiveStep(3)
-                }}
-              >
-                Next
-              </Button>
-            </Box>
-          }
+        {activeStep === 2 && signersId.length === 0 && (
+          <Box>
+            <FilePreview
+              isOpen={true}
+              onClose={() => {}}
+              file={file}
+              useModal={false}
+            />
+            <Button
+              mt={4}
+              colorScheme="green"
+              onClick={() => {
+                setActiveStep(3)
+              }}
+            >
+              Next
+            </Button>
+          </Box>
+        )}
         {activeStep === 3 && (
           <Box>
             <InviteSignerForm submitSigners={submitSigners} />
@@ -223,7 +222,7 @@ function CreateDocumentSigning() {
               onClick={() => {
                 handleNext()
               }}
-              size='sm'
+              size="sm"
             >
               Next
             </Button>
@@ -244,17 +243,25 @@ function CreateDocumentSigning() {
               </GridItem>
               <GridItem justifySelf="flex-start">
                 <Flex alignItems="center">
-                <Text
-                  fontSize="md"
-                  wordBreak="break-word"
-                  fontWeight="bold"
-                  color="gray.500"
-                >
-                  {file ? file.name : 'No file uploaded'}
-                </Text>
-                <Button ml={4} size='sm' variant='ghost' colorScheme="orange" onClick={()=>{setChangeNameModel(true)}}>
-                  Change
-                </Button>
+                  <Text
+                    fontSize="md"
+                    wordBreak="break-word"
+                    fontWeight="bold"
+                    color="gray.500"
+                  >
+                    {file ? file.name : 'No file uploaded'}
+                  </Text>
+                  <Button
+                    ml={4}
+                    size="sm"
+                    variant="ghost"
+                    colorScheme="orange"
+                    onClick={() => {
+                      setChangeNameModel(true)
+                    }}
+                  >
+                    Change
+                  </Button>
                 </Flex>
               </GridItem>
 
@@ -288,44 +295,52 @@ function CreateDocumentSigning() {
               </GridItem>
             </Grid>
 
-            <Button mt={4} size='md' colorScheme="green" onClick={submitDocument}>
+            <Button
+              mt={4}
+              size="md"
+              colorScheme="green"
+              onClick={submitDocument}
+            >
               Submit Document
             </Button>
           </Box>
         )}
-        <Modal isOpen={changeNameModel} onClose={() => setChangeNameModel(false)}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Change Name</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Input
-              type={'text'}
-              placeholder="Enter new name"
-              value={changedName}
-              onChange={(e) => setChangedName(e.target.value)}
-              mb={4}
-            />
-          </ModalBody>
-          <ModalFooter>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => setChangeNameModel(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              colorScheme="blue"
-              mr={3}
-              size="sm"
-              onClick={() => updateFileName(changedName)} 
+        <Modal
+          isOpen={changeNameModel}
+          onClose={() => setChangeNameModel(false)}
+        >
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Change Name</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <Input
+                type={'text'}
+                placeholder="Enter new name"
+                value={changedName}
+                onChange={(e) => setChangedName(e.target.value)}
+                mb={4}
+              />
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setChangeNameModel(false)}
               >
-              Confirm
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+                Cancel
+              </Button>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                size="sm"
+                onClick={() => updateFileName(changedName)}
+              >
+                Confirm
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </Box>
   )

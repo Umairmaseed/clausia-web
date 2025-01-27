@@ -13,6 +13,7 @@ import DocumentDetail from './pages/DocumentDetail'
 import PendingSignatures from './pages/ListPendingSignatures'
 import SignDocument from './pages/SignDocument'
 import Contract from './pages/ContractDashboard'
+import Invite from './pages/Invite'
 
 function App() {
   return (
@@ -54,6 +55,10 @@ function App() {
             <Route
               path="/contract"
               element={<PrivateRoute element={<Contract />} />}
+            />
+            <Route
+              path="/invite/accept"
+              element={<PrivateRoute element={<Invite />} />}
             />
           </Route>
         </Routes>
