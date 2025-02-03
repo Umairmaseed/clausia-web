@@ -13,12 +13,13 @@ interface AutoExecutableContract {
   owner: UserWithKey
   signatureDate: string
   participants?: UserWithKey[]
+  clauses?: Clause[]
 }
 
 interface ContractKey {
-    '@assetType': string
-    '@key': string
-    }
+  '@assetType': string
+  '@key': string
+}
 
 interface AddParticipants {
   autoExecutableContract: ContractKey

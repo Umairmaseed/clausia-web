@@ -23,8 +23,8 @@ import noDataImage from '../assets/Contract/no_data.jpg'
 import CreateContractForm from '../components/createContractForm'
 import { ContractService } from '../services/contract'
 import { useAuth } from '../context/Authcontext'
-import { useQuery , useQueryClient} from '@tanstack/react-query'
-import { format } from 'date-fns';
+import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import AddParticipantForm from '../components/inviteParticipants'
 
 const Contract = () => {
@@ -37,17 +37,19 @@ const Contract = () => {
   const [userParticipatedContracts, setUserParticipatedContracts] = useState<
     AutoExecutableContract[]
   >([])
-  const [isParticipantFormOpen, setIsParticipantFormOpen] = useState(false);
+  const [isParticipantFormOpen, setIsParticipantFormOpen] = useState(false)
 
-  const handleAddParticipants = async (newParticipants : UserKey[], contractId :string) => {
+  const handleAddParticipants = async (
+    newParticipants: UserKey[],
+    contractId: string
+  ) => {
     setLoading(true)
-   const req = {
-        "participants": newParticipants,
-        "autoExecutableContract": {
-            "@assetType": "autoExecutableContract",
-            "@key": contractId,
-        }
-
+    const req = {
+      participants: newParticipants,
+      autoExecutableContract: {
+        '@assetType': 'autoExecutableContract',
+        '@key': contractId,
+      },
     }
 
     const response = await ContractService.AddParticipants(req)
@@ -70,7 +72,7 @@ const Contract = () => {
       })
     }
     setLoading(false)
-  };
+  }
 
   const { data, isLoading, error } = useQuery({
     queryKey: ['UserContracts'],
@@ -103,7 +105,7 @@ const Contract = () => {
     if (data && data.participantContract) {
       setUserParticipatedContracts(data.participantContract)
     }
-  }, [isLoading, error, data,toast])
+  }, [isLoading, error, data, toast])
 
   const handleCreateContract = async (data: {
     name: string
@@ -129,6 +131,10 @@ const Contract = () => {
         isClosable: true,
       })
     }
+  }
+
+  const navigateToContract = (contractId: string) => {
+    window.location.href = `/contract/view/${contractId}`
   }
 
   return (
@@ -193,14 +199,20 @@ const Contract = () => {
                       <Tr key={index}>
                         <Td>{contract.name}</Td>
                         <Td>
-                        {contract.signatureDate
-                            ? format(new Date(contract.signatureDate), 'dd MMM, yyyy')
+                          {contract.signatureDate
+                            ? format(
+                                new Date(contract.signatureDate),
+                                'dd MMM, yyyy'
+                              )
                             : '-'}
                         </Td>
                         <Td>{contract.owner.name}</Td>
                         <Td>
-                        {contract['@lastUpdated']
-                            ? format(new Date(contract['@lastUpdated']), 'dd MMM, yyyy')
+                          {contract['@lastUpdated']
+                            ? format(
+                                new Date(contract['@lastUpdated']),
+                                'dd MMM, yyyy'
+                              )
                             : '-'}
                         </Td>
                         <Td>
@@ -212,22 +224,28 @@ const Contract = () => {
                             : '-'}
                         </Td>
                         <Td>
-                          <Button size="sm" colorScheme="teal" mr={2}>
-                            Add Clause
-                          </Button>
-                          <Button size="sm" colorScheme="teal" mr={2}         onClick={() => setIsParticipantFormOpen(true)}
+                          <Button
+                            size="sm"
+                            colorScheme="teal"
+                            mr={2}
+                            onClick={() => setIsParticipantFormOpen(true)}
                           >
                             Add Participants
                           </Button>
-                          <Button size="sm" colorScheme="red">
-                            Cancel
+                          <Button
+                            onClick={() => navigateToContract(contract['@key'])}
+                            size="sm"
+                            colorScheme="teal"
+                            mr={2}
+                          >
+                            View
                           </Button>
                           <AddParticipantForm
-                                isOpen={isParticipantFormOpen}
-                                onClose={() => setIsParticipantFormOpen(false)}
-                                onAddParticipant={handleAddParticipants}
-                                contractId={contract['@key']}
-                            />
+                            isOpen={isParticipantFormOpen}
+                            onClose={() => setIsParticipantFormOpen(false)}
+                            onAddParticipant={handleAddParticipants}
+                            contractId={contract['@key']}
+                          />
                         </Td>
                       </Tr>
                     ))}
@@ -260,14 +278,20 @@ const Contract = () => {
                       <Tr key={index}>
                         <Td>{contract.name}</Td>
                         <Td>
-                        {contract.signatureDate
-                            ? format(new Date(contract.signatureDate), 'dd MMM, yyyy')
+                          {contract.signatureDate
+                            ? format(
+                                new Date(contract.signatureDate),
+                                'dd MMM, yyyy'
+                              )
                             : '-'}
                         </Td>
                         <Td>{contract.owner.name}</Td>
                         <Td>
-                        {contract['@lastUpdated']
-                            ? format(new Date(contract['@lastUpdated']), 'dd MMM, yyyy')
+                          {contract['@lastUpdated']
+                            ? format(
+                                new Date(contract['@lastUpdated']),
+                                'dd MMM, yyyy'
+                              )
                             : '-'}
                         </Td>
                         <Td>
