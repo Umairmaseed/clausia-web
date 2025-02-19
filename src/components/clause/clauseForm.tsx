@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import {
   Modal,
   ModalOverlay,
   ModalContent,
   ModalHeader,
   ModalBody,
-  ModalFooter,
-  Button,
   FormControl,
   FormLabel,
   Select,
-  Input,
 } from '@chakra-ui/react'
 import { actionTypeDropdownValues, ActionType } from '../../utils/actionType'
 import DateAndTimeInputs from './dateAndTimeInputs'
+import GetDeductionForm from './getDeductionInputs'
 
 interface ClauseFormProps {
   contract?: AutoExecutableContract
@@ -35,7 +33,7 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
       size="4xl"
     >
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent pb={4}>
         <ModalHeader>Create Clause</ModalHeader>
         <ModalBody>
           <FormControl>
@@ -57,6 +55,12 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
 
           {clauseType === ActionType.CheckDateInterval && (
             <DateAndTimeInputs
+              autoExecutableContract={contract}
+              setOpenClauseModel={setOpenClauseModel}
+            />
+          )}
+          {clauseType === ActionType.GetDeduction && (
+            <GetDeductionForm
               autoExecutableContract={contract}
               setOpenClauseModel={setOpenClauseModel}
             />
