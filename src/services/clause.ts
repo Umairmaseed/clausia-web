@@ -8,6 +8,6 @@ export const ClauseService = {
           'Content-Type': 'application/json',
         },
       })
-      .then((res) => res.data)
+      .then((res) => res)
   },
 }

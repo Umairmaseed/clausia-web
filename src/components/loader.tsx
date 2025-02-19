@@ -1,4 +1,4 @@
-import { Box, Spinner, Image } from '@chakra-ui/react'
+import { Box, Spinner } from '@chakra-ui/react'
 
 const Loader = () => {
   return (

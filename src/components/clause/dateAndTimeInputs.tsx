@@ -8,6 +8,7 @@ import {
   HStack,
   Select,
   Flex,
+  useToast,
 } from '@chakra-ui/react'
 import { ActionType } from '../../utils/actionType'
 import { ClauseService } from '../../services/clause'
@@ -31,6 +32,7 @@ const DateAndTimeInputs: React.FC<Props> = ({
 }) => {
   const { setLoading } = useAuth()
   const [dateInput, setDateInput] = useState<string>('')
+  const toast = useToast()
   const [formData, setFormData] = useState<AddClauseForm>({
     autoExecutableContract: autoExecutableContract
       ? {
@@ -95,22 +97,36 @@ const DateAndTimeInputs: React.FC<Props> = ({
 
   const submitClause = async () => {
     setLoading(true)
+    setOpenClauseModel(false)
     try {
       const response = await ClauseService.AddClause(formData)
-      if (response.contract === null) {
-        throw new Error('Error submitting clause')
+      if (response.status === 200) {
+        toast({
+          title: 'Success',
+          description: 'Clause submitted successfully',
+          status: 'success',
+          duration: 5000,
+          isClosable: true,
+        })
       } else {
-        setOpenClauseModel(false)
+        throw new Error('Error submitting clause')
       }
     } catch (error) {
+      setOpenClauseModel(true)
+      toast({
+        title: 'Error',
+        description: 'Error submitting clause',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
       setLoading(false)
-      console.error('Error submitting clause:', error)
     }
     setLoading(false)
   }
 
   return (
-    <VStack spacing={4} align="start">
+    <VStack spacing={4} py={4} align="start">
       <FormControl>
         <FormLabel>Description</FormLabel>
         <Input

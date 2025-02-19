@@ -6,8 +6,6 @@ import {
   Button,
   VStack,
   HStack,
-  Spinner,
-  Flex,
   GridItem,
   Grid,
 } from '@chakra-ui/react'
@@ -24,21 +22,21 @@ const ContractView: React.FC = () => {
   const [openClauseModel, setOpenClauseModel] = useState(false)
 
   useEffect(() => {
-    const fetchContract = async () => {
-      setLoading(true)
-      if (id) {
-        try {
-          const response = await ContractService.GetContract(id)
-          setContract(response.contract || null)
-        } catch (error) {
-          console.error('Error fetching contract:', error)
-        }
-      }
-      setLoading(false)
-    }
-
     fetchContract()
   }, [id])
+
+  const fetchContract = async () => {
+    setLoading(true)
+    if (id) {
+      try {
+        const response = await ContractService.GetContract(id)
+        setContract(response.contract || null)
+      } catch (error) {
+        console.error('Error fetching contract:', error)
+      }
+    }
+    setLoading(false)
+  }
 
   return (
     <Box p={10}>

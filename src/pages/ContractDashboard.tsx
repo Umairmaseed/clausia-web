@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -219,7 +219,7 @@ const Contract = () => {
                           {contract.participants &&
                           contract.participants.length > 0
                             ? contract.participants
-                                .map((participant, index) => participant.name)
+                                .map((participant, _) => participant.name)
                                 .join(', ')
                             : '-'}
                         </Td>
@@ -298,7 +298,7 @@ const Contract = () => {
                           {contract.participants &&
                           contract.participants.length > 0
                             ? contract.participants
-                                .map((participant, index) => participant.name)
+                                .map((participant, _) => participant.name)
                                 .join(', ')
                             : '-'}
                         </Td>
