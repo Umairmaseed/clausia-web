@@ -15,6 +15,7 @@ import SignDocument from './pages/SignDocument'
 import Contract from './pages/ContractDashboard'
 import Invite from './pages/Invite'
 import ContractView from './pages/ContractView'
+import ClauseDashboard from './pages/ClauseDashboard'
 
 function App() {
   return (
@@ -60,6 +61,10 @@ function App() {
             <Route
               path="/contract/view/:id"
               element={<PrivateRoute element={<ContractView />} />}
+            />
+            <Route
+              path="/clause/view/:id"
+              element={<PrivateRoute element={<ClauseDashboard />} />}
             />
             <Route
               path="/invite/accept"
