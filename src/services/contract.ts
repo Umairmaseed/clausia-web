@@ -42,7 +42,7 @@ export const ContractService = {
   },
   CancelContract: async (formData: CancelContract) => {
     return api
-      .post('canceldocument', formData, {
+      .post('cancelcontract', formData, {
         headers: {
           'Content-Type': 'application/json',
         },
