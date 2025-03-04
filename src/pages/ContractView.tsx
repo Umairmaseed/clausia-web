@@ -14,12 +14,14 @@ import ClauseForm from '../components/clause/clauseForm'
 import { useAuth } from '../context/Authcontext'
 import { ContractService } from '../services/contract'
 import { getActionTypeLabel } from '../utils/actionType'
+import { useToast } from '@chakra-ui/react'
 
 const ContractView: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const { setLoading } = useAuth()
   const [contract, setContract] = useState<AutoExecutableContract>()
   const [openClauseModel, setOpenClauseModel] = useState(false)
+  const toast = useToast()
 
   useEffect(() => {
     fetchContract()
@@ -31,11 +33,23 @@ const ContractView: React.FC = () => {
       try {
         const response = await ContractService.GetContract(id)
         setContract(response.contract || null)
+        console.log(response.contract)
       } catch (error) {
-        console.error('Error fetching contract:', error)
+        toast({
+          title: 'Error fetching contract',
+          description:
+            'An error occurred while fetching the contract. Please try again later.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
       }
     }
     setLoading(false)
+  }
+
+  const navigateToClause = (clauseId: string) => {
+    window.location.href = `/clause/view/${clauseId}`
   }
 
   return (
@@ -102,21 +116,31 @@ const ContractView: React.FC = () => {
                   borderWidth="1px"
                   width="100%"
                   borderRadius={8}
-                  background="blue.100"
+                  background="gray.100"
+                  px={8}
                 >
-                  <Grid templateColumns="repeat(4, 1fr)" gap={4}>
+                  <Grid
+                    templateColumns="repeat(6, 1fr)"
+                    gap={6}
+                    alignItems="center"
+                  >
                     <GridItem>
-                      <Text>
-                        <strong>Clause ID:</strong> {clause.id}
+                      <Text isTruncated overflow="hidden" whiteSpace="nowrap">
+                        <strong>ID:</strong> {clause.id}
                       </Text>
                     </GridItem>
                     <GridItem>
-                      <Text>
+                      <Text isTruncated overflow="hidden" whiteSpace="nowrap">
+                        <strong>Key:</strong> {clause['@key']}
+                      </Text>
+                    </GridItem>
+                    <GridItem>
+                      <Text isTruncated overflow="hidden" whiteSpace="nowrap">
                         <strong>Type:</strong>{' '}
                         {getActionTypeLabel(clause.actionType)}
                       </Text>
                     </GridItem>
-                    <GridItem>
+                    <GridItem isTruncated overflow="hidden" whiteSpace="nowrap">
                       <Text>
                         <strong>Category:</strong> {clause.category}
                       </Text>
@@ -126,6 +150,15 @@ const ContractView: React.FC = () => {
                         <strong>Finalized:</strong>{' '}
                         {clause.finalized ? 'Yes' : 'No'}
                       </Text>
+                    </GridItem>
+                    <GridItem justifySelf="end">
+                      <Button
+                        size="sm"
+                        colorScheme="blue"
+                        onClick={() => navigateToClause(clause['@key'])}
+                      >
+                        View
+                      </Button>
                     </GridItem>
                   </Grid>
                 </Box>
@@ -143,6 +176,7 @@ const ContractView: React.FC = () => {
             contract={contract}
             openClauseModel={openClauseModel}
             setOpenClauseModel={setOpenClauseModel}
+            fetchContract={fetchContract}
           />
         </Box>
       </VStack>
