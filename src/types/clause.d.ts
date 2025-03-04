@@ -11,6 +11,7 @@ type AddClauseForm = {
 
 type Clause = {
   id: string
+  '@key': string
   description?: string
   category?: string
   parameters?: Record<string, any>
