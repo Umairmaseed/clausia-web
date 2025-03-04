@@ -10,19 +10,21 @@ import {
   Select,
 } from '@chakra-ui/react'
 import { actionTypeDropdownValues, ActionType } from '../../utils/actionType'
-import DateAndTimeInputs from './dateAndTimeInputs'
-import GetDeductionForm from './getDeductionInputs'
+import GetDeductionForm from './getDeductionParams'
+import DateAndTimeParams from './dateAndTimeParams'
 
 interface ClauseFormProps {
   contract?: AutoExecutableContract
   openClauseModel: boolean
   setOpenClauseModel: (value: boolean) => void
+  fetchContract: () => void
 }
 
 const ClauseForm: React.FC<ClauseFormProps> = ({
   contract,
   openClauseModel,
   setOpenClauseModel,
+  fetchContract,
 }) => {
   const [clauseType, setClauseType] = useState<ActionType | ''>('')
 
@@ -54,15 +56,17 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
           </FormControl>
 
           {clauseType === ActionType.CheckDateInterval && (
-            <DateAndTimeInputs
+            <DateAndTimeParams
               autoExecutableContract={contract}
               setOpenClauseModel={setOpenClauseModel}
+              fetchContract={fetchContract}
             />
           )}
           {clauseType === ActionType.GetDeduction && (
             <GetDeductionForm
               autoExecutableContract={contract}
               setOpenClauseModel={setOpenClauseModel}
+              fetchContract={fetchContract}
             />
           )}
         </ModalBody>
