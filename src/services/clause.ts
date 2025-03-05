@@ -23,7 +23,7 @@ export const ClauseService = {
         },
       })
       .then((res) => res)
-    },
+  },
   AddReferenceDate: async (formData: any) => {
     return api
       .post('addreferencedate', formData, {

@@ -30,7 +30,7 @@ interface Props {
 const DateAndTimeParams: React.FC<Props> = ({
   autoExecutableContract,
   setOpenClauseModel,
-  fetchContract
+  fetchContract,
 }) => {
   const { setLoading } = useAuth()
   const [dateInput, setDateInput] = useState<string>('')
@@ -81,7 +81,11 @@ const DateAndTimeParams: React.FC<Props> = ({
 
   const handleDateChange = (value: string) => {
     setDateInput(value)
-    handleParameterChange('referenceDate', value)
+    const date = new Date(value)
+
+    const formattedDate = date.toISOString().split('.')[0] + 'Z'
+
+    handleParameterChange('referenceDate', formattedDate)
   }
 
   const handleDependenciesChange = (selectedClauseIds: string[]) => {
