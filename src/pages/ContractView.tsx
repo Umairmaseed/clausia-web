@@ -14,6 +14,7 @@ import ClauseForm from '../components/clause/clauseForm'
 import { useAuth } from '../context/Authcontext'
 import { ContractService } from '../services/contract'
 import { getActionTypeLabel } from '../utils/actionType'
+import { formatObjectEntries } from '../utils/formatObjectEntries'
 import { useToast } from '@chakra-ui/react'
 
 const ContractView: React.FC = () => {
@@ -33,7 +34,6 @@ const ContractView: React.FC = () => {
       try {
         const response = await ContractService.GetContract(id)
         setContract(response.contract || null)
-        console.log(response.contract)
       } catch (error) {
         toast({
           title: 'Error fetching contract',
@@ -75,7 +75,7 @@ const ContractView: React.FC = () => {
                 <strong>Last Updated:</strong> {contract['@lastUpdated']}
               </Text>
               <Text mt={2}>
-                <strong>Participants:</strong>
+                <strong>Participants:</strong>{' '}
                 {contract.participants
                   ? contract.participants
                       .map((participant) => participant.name)
@@ -85,6 +85,31 @@ const ContractView: React.FC = () => {
               <Text mt={2}>
                 <strong>Owner:</strong> {contract.owner.name}
               </Text>
+
+              {contract.data && (
+                <Box mt={6} bg="orange.50" p={4} borderRadius="md">
+                  <Heading as="h3" color="orange.400" size="md" mb={4}>
+                    Contract Data
+                  </Heading>
+                  <VStack align="start" spacing={2}>
+                    {formatObjectEntries(contract.data).map(
+                      ({ key, value }) => (
+                        <Text key={key}>
+                          <strong>{key}:</strong>{' '}
+                          {typeof value === 'string' &&
+                          value.startsWith('{') ? (
+                            <pre style={{ whiteSpace: 'pre-wrap' }}>
+                              {value}
+                            </pre>
+                          ) : (
+                            value
+                          )}
+                        </Text>
+                      )
+                    )}
+                  </VStack>
+                </Box>
+              )}
             </>
           ) : (
             <Text mt={4}>Contract not found or an error occurred.</Text>
@@ -102,6 +127,7 @@ const ContractView: React.FC = () => {
             )}
           </HStack>
         </Box>
+
         <Box p={5}>
           <Heading as="h2" textAlign={'center'} size="lg">
             Clauses
@@ -140,7 +166,7 @@ const ContractView: React.FC = () => {
                         {getActionTypeLabel(clause.actionType)}
                       </Text>
                     </GridItem>
-                    <GridItem isTruncated overflow="hidden" whiteSpace="nowrap">
+                    <GridItem>
                       <Text>
                         <strong>Category:</strong> {clause.category}
                       </Text>
