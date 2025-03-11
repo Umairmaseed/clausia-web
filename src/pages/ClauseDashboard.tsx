@@ -14,6 +14,8 @@ import { ActionType, getActionTypeLabel } from '../utils/actionType'
 import { useAuth } from '../context/Authcontext'
 import DateTimeInput from '../components/clause/dateAndTimeInputs'
 import { ClauseService } from '../services/clause'
+import { formatObjectEntries } from '../utils/formatObjectEntries'
+import GetCreditInput from '../components/clause/getCreditInputs'
 
 const ClauseDashboard = () => {
   const { id } = useParams<{ id: string }>()
@@ -22,19 +24,11 @@ const ClauseDashboard = () => {
   const toast = useToast()
 
   const renderFormattedText = (data: Record<string, any>) => {
-    return Object.entries(data)
-      .filter(([key]) => key !== '@assetType')
-      .map(([key, value]) => {
-        const formattedKey = key
-          .replace(/([a-z])([A-Z])/g, '$1 $2')
-          .replace(/^./, (str) => str.toUpperCase())
-
-        return (
-          <Text key={key}>
-            <strong>{formattedKey}:</strong> {String(value)}
-          </Text>
-        )
-      })
+    return formatObjectEntries(data).map(({ key, value }) => (
+      <Text key={key}>
+        <strong>{key}:</strong> {value}
+      </Text>
+    ))
   }
 
   useEffect(() => {
@@ -64,8 +58,6 @@ const ClauseDashboard = () => {
   if (!clause) return null
 
   const hasInput = clause.input && Object.keys(clause.input).length > 0
-  const needsInput =
-    clause.actionType === ActionType.CheckDateInterval && !hasInput
 
   return (
     <Box
@@ -165,8 +157,14 @@ const ClauseDashboard = () => {
             </Text>
           </Box>
         )}
-        {needsInput && clause.actionType === ActionType.CheckDateInterval && (
+        {!hasInput && !clause.finalized && clause.actionType === ActionType.CheckDateInterval && (
           <DateTimeInput
+            clause={clause}
+            onSubmitSuccess={() => fetchClause()}
+          />
+        )}
+        {!hasInput && !clause.finalized && clause.actionType === ActionType.GetCredit && (
+          <GetCreditInput
             clause={clause}
             onSubmitSuccess={() => fetchClause()}
           />
