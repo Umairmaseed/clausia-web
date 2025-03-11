@@ -13,7 +13,7 @@ import {
   NumberInput,
   NumberInputField,
   Checkbox,
-    Select,
+  Select,
 } from '@chakra-ui/react'
 import { useAuth } from '../../context/Authcontext'
 import { ClauseService } from '../../services/clause'
@@ -86,7 +86,9 @@ const GetCreditForm: React.FC<GetCreditFormProps> = ({
       imposeCredit,
       creditName: creditName || 'defaultCredit',
       percentage,
-      predefinedValue: predefinedValue ? parseFloat(predefinedValue) : undefined,
+      predefinedValue: predefinedValue
+        ? parseFloat(predefinedValue)
+        : undefined,
       reviewCondition,
     }
 
@@ -129,22 +131,40 @@ const GetCreditForm: React.FC<GetCreditFormProps> = ({
       <VStack spacing={4} align="stretch">
         <FormControl>
           <FormLabel>Description</FormLabel>
-          <Input placeholder="Enter description" value={description} onChange={(e) => setDescription(e.target.value)} />
+          <Input
+            placeholder="Enter description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Category</FormLabel>
-          <Input placeholder="Enter category" value={category} onChange={(e) => setCategory(e.target.value)} />
+          <Input
+            placeholder="Enter category"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Credit Name</FormLabel>
-          <Input placeholder="Enter credit name" value={creditName} onChange={(e) => setCreditName(e.target.value)} />
+          <Input
+            placeholder="Enter credit name"
+            value={creditName}
+            onChange={(e) => setCreditName(e.target.value)}
+          />
         </FormControl>
 
         <FormControl>
           <FormLabel>Percentage: {percentage}%</FormLabel>
-          <Slider value={percentage} onChange={setPercentage} min={0} max={100} step={0.5}>
+          <Slider
+            value={percentage}
+            onChange={setPercentage}
+            min={0}
+            max={100}
+            step={0.5}
+          >
             <SliderTrack>
               <SliderFilledTrack background="orange" />
             </SliderTrack>
@@ -155,18 +175,28 @@ const GetCreditForm: React.FC<GetCreditFormProps> = ({
         <FormControl>
           <FormLabel>Predefined Value</FormLabel>
           <NumberInput>
-            <NumberInputField placeholder="Enter predefined value" value={predefinedValue} onChange={(e) => setPredefinedValue(e.target.value)} />
+            <NumberInputField
+              placeholder="Enter predefined value"
+              value={predefinedValue}
+              onChange={(e) => setPredefinedValue(e.target.value)}
+            />
           </NumberInput>
         </FormControl>
 
         <FormControl>
-          <Checkbox isChecked={imposeCredit} onChange={(e) => setImposeCredit(e.target.checked)}>
+          <Checkbox
+            isChecked={imposeCredit}
+            onChange={(e) => setImposeCredit(e.target.checked)}
+          >
             Impose Credit
           </Checkbox>
         </FormControl>
 
         <FormControl>
-          <Checkbox isChecked={reviewCondition} onChange={(e) => setReviewCondition(e.target.checked)}>
+          <Checkbox
+            isChecked={reviewCondition}
+            onChange={(e) => setReviewCondition(e.target.checked)}
+          >
             Review Condition
           </Checkbox>
         </FormControl>
