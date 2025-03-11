@@ -49,4 +49,13 @@ export const ContractService = {
       })
       .then((res) => res.data)
   },
+  AddReviewToContract: async (formData: ClauseReview) => {
+    return api
+      .post('addreviewtocontract', JSON.stringify(formData), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => res)
+  },
 }
