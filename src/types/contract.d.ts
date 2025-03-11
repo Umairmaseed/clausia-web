@@ -14,6 +14,7 @@ interface AutoExecutableContract {
   signatureDate: string
   participants?: UserWithKey[]
   clauses?: Clause[]
+  data?: Record<string, any>
 }
 
 interface ContractKey {
