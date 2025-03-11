@@ -33,4 +33,13 @@ export const ClauseService = {
       })
       .then((res) => res)
   },
+  AddStoredValueToGetCredit: async (formData: any) => {
+    return api
+      .post('addstoredvaluetogetcredit', JSON.stringify(formData), {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => res)
+  },
 }
