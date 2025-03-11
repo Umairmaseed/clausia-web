@@ -22,3 +22,10 @@ type Clause = {
   finalized?: boolean
   result?: Record<string, any>
 }
+
+type ClauseReview = {
+  rating: number
+  comments: string
+  date: string
+  contract_id: Record<string, any>
+}
