@@ -13,6 +13,7 @@ import { actionTypeDropdownValues, ActionType } from '../../utils/actionType'
 import GetDeductionForm from './getDeductionParams'
 import DateAndTimeParams from './dateAndTimeParams'
 import GetCreditForm from './getCreditParams'
+import MakePaymentForm from './makePaymentParams'
 
 interface ClauseFormProps {
   contract?: AutoExecutableContract
@@ -72,6 +73,13 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
           )}
           {clauseType === ActionType.GetCredit && (
             <GetCreditForm
+              autoExecutableContract={contract}
+              setOpenClauseModel={setOpenClauseModel}
+              fetchContract={fetchContract}
+            />
+          )}
+          {clauseType === ActionType.Payment && (
+            <MakePaymentForm
               autoExecutableContract={contract}
               setOpenClauseModel={setOpenClauseModel}
               fetchContract={fetchContract}
