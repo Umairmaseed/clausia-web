@@ -42,4 +42,16 @@ export const ClauseService = {
       })
       .then((res) => res)
   },
+  AddInputsToMakePayment: async (formData: any) => {
+    for (let pair of formData.entries()) {
+      console.log(`${pair[0]}: ${pair[1]} (${typeof pair[1]})`)
+    }
+    return api
+      .post('addinputstomakepayment', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => res)
+  },
 }
