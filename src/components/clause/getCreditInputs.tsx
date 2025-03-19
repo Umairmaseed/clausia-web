@@ -13,13 +13,6 @@ import {
 import { ClauseService } from '../../services/clause'
 import { useAuth } from '../../context/Authcontext'
 
-interface Clause {
-  id: string
-  input?: { review?: ClauseReview; storedValue?: number }
-  parameters?: { reviewCondition?: boolean; imposeCredit?: boolean }
-  result?: Record<string, any>
-}
-
 interface GetCreditInputProps {
   clause: Clause
   onSubmitSuccess: () => void
@@ -32,7 +25,6 @@ const GetCreditInput: React.FC<GetCreditInputProps> = ({
   const toast = useToast()
   const { setLoading } = useAuth()
   const existingInput = clause.input
-  const imposeCredit = clause.parameters?.imposeCredit ?? false
 
   const [storedValue, setStoredValue] = useState<number>(
     existingInput?.storedValue || 0
@@ -67,23 +59,6 @@ const GetCreditInput: React.FC<GetCreditInputProps> = ({
       showToast('Error', 'Failed to submit credit input.', 'error')
     }
     setLoading(false)
-  }
-
-  if (existingInput?.review) {
-    return (
-      <Box
-        width="50%"
-        p={4}
-        borderWidth="1px"
-        borderRadius={8}
-        background="white"
-      >
-        <Text fontWeight="bold">Existing Input</Text>
-        <Text>Rating: {existingInput.review.rating} ⭐</Text>
-        <Text>Comments: {existingInput.review.comments}</Text>
-        <Text>Stored Value: {existingInput.storedValue}</Text>
-      </Box>
-    )
   }
 
   return (

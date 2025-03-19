@@ -16,6 +16,7 @@ import DateTimeInput from '../components/clause/dateAndTimeInputs'
 import { ClauseService } from '../services/clause'
 import { formatObjectEntries } from '../utils/formatObjectEntries'
 import GetCreditInput from '../components/clause/getCreditInputs'
+import MakePaymentInputs from '../components/clause/makePaymentInputs'
 
 const ClauseDashboard = () => {
   const { id } = useParams<{ id: string }>()
@@ -157,14 +158,24 @@ const ClauseDashboard = () => {
             </Text>
           </Box>
         )}
-        {!hasInput && !clause.finalized && clause.actionType === ActionType.CheckDateInterval && (
-          <DateTimeInput
-            clause={clause}
-            onSubmitSuccess={() => fetchClause()}
-          />
-        )}
-        {!hasInput && !clause.finalized && clause.actionType === ActionType.GetCredit && (
-          <GetCreditInput
+        {!hasInput &&
+          !clause.finalized &&
+          clause.actionType === ActionType.CheckDateInterval && (
+            <DateTimeInput
+              clause={clause}
+              onSubmitSuccess={() => fetchClause()}
+            />
+          )}
+        {!hasInput &&
+          !clause.finalized &&
+          clause.actionType === ActionType.GetCredit && (
+            <GetCreditInput
+              clause={clause}
+              onSubmitSuccess={() => fetchClause()}
+            />
+          )}
+        {!clause.finalized && clause.actionType === ActionType.Payment && (
+          <MakePaymentInputs
             clause={clause}
             onSubmitSuccess={() => fetchClause()}
           />
