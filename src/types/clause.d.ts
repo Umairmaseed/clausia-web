@@ -27,5 +27,5 @@ type ClauseReview = {
   rating: number
   comments: string
   date: string
-  contract_id: Record<string, any>
+  autoExecutableContract: Record<string, any>
 }

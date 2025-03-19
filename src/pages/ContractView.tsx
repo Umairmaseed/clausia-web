@@ -16,12 +16,14 @@ import { ContractService } from '../services/contract'
 import { getActionTypeLabel } from '../utils/actionType'
 import { formatObjectEntries } from '../utils/formatObjectEntries'
 import { useToast } from '@chakra-ui/react'
+import ReviewForm from '../components/reviewForm'
 
 const ContractView: React.FC = () => {
   const { id } = useParams<{ id: string }>()
   const { setLoading } = useAuth()
   const [contract, setContract] = useState<AutoExecutableContract>()
   const [openClauseModel, setOpenClauseModel] = useState(false)
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false)
   const toast = useToast()
 
   useEffect(() => {
@@ -125,6 +127,15 @@ const ContractView: React.FC = () => {
                 Add Clause
               </Button>
             )}
+            {contract && !contract.data?.review && (
+              <Button
+                size={'sm'}
+                onClick={() => setIsReviewModalOpen(true)}
+                colorScheme="blue"
+              >
+                Give Feedback
+              </Button>
+            )}
           </HStack>
         </Box>
 
@@ -205,6 +216,15 @@ const ContractView: React.FC = () => {
             fetchContract={fetchContract}
           />
         </Box>
+
+        {contract && (
+          <ReviewForm
+            contractId={id as string}
+            isOpen={isReviewModalOpen}
+            onClose={() => setIsReviewModalOpen(false)}
+            fetchContract={fetchContract}
+          />
+        )}
       </VStack>
     </Box>
   )
