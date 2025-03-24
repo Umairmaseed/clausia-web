@@ -17,6 +17,7 @@ import { ClauseService } from '../services/clause'
 import { formatObjectEntries } from '../utils/formatObjectEntries'
 import GetCreditInput from '../components/clause/getCreditInputs'
 import MakePaymentInputs from '../components/clause/makePaymentInputs'
+import GetDeductionInput from '../components/clause/getDeductionInputs'
 
 const ClauseDashboard = () => {
   const { id } = useParams<{ id: string }>()
@@ -170,6 +171,14 @@ const ClauseDashboard = () => {
           !clause.finalized &&
           clause.actionType === ActionType.GetCredit && (
             <GetCreditInput
+              clause={clause}
+              onSubmitSuccess={() => fetchClause()}
+            />
+          )}
+        {!hasInput &&
+          !clause.finalized &&
+          clause.actionType === ActionType.GetDeduction && (
+            <GetDeductionInput
               clause={clause}
               onSubmitSuccess={() => fetchClause()}
             />
