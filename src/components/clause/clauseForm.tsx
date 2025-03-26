@@ -14,6 +14,7 @@ import GetDeductionForm from './getDeductionParams'
 import DateAndTimeParams from './dateAndTimeParams'
 import GetCreditForm from './getCreditParams'
 import MakePaymentForm from './makePaymentParams'
+import FinalizeContractInput from './finalizeParams'
 
 interface ClauseFormProps {
   contract?: AutoExecutableContract
@@ -80,6 +81,13 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
           )}
           {clauseType === ActionType.Payment && (
             <MakePaymentForm
+              autoExecutableContract={contract}
+              setOpenClauseModel={setOpenClauseModel}
+              fetchContract={fetchContract}
+            />
+          )}
+          {clauseType === ActionType.FinishContract && (
+            <FinalizeContractInput
               autoExecutableContract={contract}
               setOpenClauseModel={setOpenClauseModel}
               fetchContract={fetchContract}
