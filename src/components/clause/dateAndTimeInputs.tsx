@@ -136,6 +136,10 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
         {!hasReferenceDate && (
           <FormControl>
             <FormLabel>Reference Date</FormLabel>
+            <Text fontSize="sm" color="gray.500" mb={2}>
+              Provide a reference date if not set earlier or if you want to
+              update it. Skip this if you want to keep the existing one
+            </Text>
             <InputGroup>
               <DatePicker
                 selected={referenceDate}
@@ -160,6 +164,9 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
 
         <FormControl>
           <FormLabel>Evaluated Date</FormLabel>
+          <Text fontSize="sm" color="gray.500" mb={2}>
+            Provide the date according to which the clause will be evaluated.
+          </Text>
           <InputGroup>
             <DatePicker
               selected={evaluatedDate}
