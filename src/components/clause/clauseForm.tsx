@@ -8,6 +8,7 @@ import {
   FormControl,
   FormLabel,
   Select,
+  Text,
 } from '@chakra-ui/react'
 import { actionTypeDropdownValues, ActionType } from '../../utils/actionType'
 import GetDeductionForm from './getDeductionParams'
@@ -43,6 +44,9 @@ const ClauseForm: React.FC<ClauseFormProps> = ({
         <ModalBody>
           <FormControl>
             <FormLabel>Clause Type</FormLabel>
+            <Text fontSize="sm" color="gray.500" mb={2}>
+              Please select the type of clause from the options below.
+            </Text>
             <Select
               placeholder="Select Clause Type"
               value={clauseType}
