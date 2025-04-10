@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import {
-  Box,
+  Text,
   Button,
   Heading,
   Input,
@@ -13,7 +13,6 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-  useDisclosure,
 } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
@@ -56,9 +55,9 @@ const CreateContractForm: React.FC<CreateContractFormProps> = ({
         <ModalBody>
           {step === 1 ? (
             <VStack spacing="4">
-              <Heading size="md">
+              <Text fontSize="sm" fontWeight="bold" color="gray.500" mb={2}>
                 What would you like to call this contract?
-              </Heading>
+              </Text>
               <Input
                 placeholder="Contract name"
                 value={name}
