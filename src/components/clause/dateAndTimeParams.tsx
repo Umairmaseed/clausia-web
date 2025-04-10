@@ -9,6 +9,8 @@ import {
   Select,
   Flex,
   useToast,
+  Text,
+  Box,
 } from '@chakra-ui/react'
 import { ActionType } from '../../utils/actionType'
 import { ClauseService } from '../../services/clause'
@@ -34,6 +36,8 @@ const DateAndTimeParams: React.FC<Props> = ({
 }) => {
   const { setLoading } = useAuth()
   const [dateInput, setDateInput] = useState<string>('')
+  const [contractHaveDates, setContractHaveDates] = useState(false)
+  const [contractDates, setContractDates] = useState<Record<string, any>>({})
   const toast = useToast()
   const [formData, setFormData] = useState<AddClauseForm>({
     autoExecutableContract: autoExecutableContract
@@ -65,6 +69,16 @@ const DateAndTimeParams: React.FC<Props> = ({
     setDateInput(fetchedParams.referenceDate)
   }, [])
 
+  useEffect(() => {
+    if (autoExecutableContract?.dates) {
+      const dates = Object.keys(autoExecutableContract.dates)
+      if (dates.length > 0) {
+        setContractHaveDates(true)
+        setContractDates(autoExecutableContract.dates)
+      }
+    }
+  }, [autoExecutableContract])
+
   const handleChange = (key: string, value: string | number) => {
     setFormData((prev) => ({
       ...prev,
@@ -73,15 +87,33 @@ const DateAndTimeParams: React.FC<Props> = ({
   }
 
   const handleParameterChange = (key: string, value: string | number) => {
+    const isNumericString =
+      typeof value === 'string' && value.trim() !== '' && !isNaN(Number(value))
+    const parsedValue = isNumericString ? Number(value) : value
+
     setFormData((prev) => ({
       ...prev,
-      parameters: { ...prev.parameters, [key]: value },
+      parameters: {
+        ...prev.parameters,
+        [key]: parsedValue,
+      },
     }))
   }
 
   const handleDateChange = (value: string) => {
     setDateInput(value)
+
     const date = new Date(value)
+    if (isNaN(date.getTime())) {
+      toast({
+        title: 'Invalid Date',
+        description: 'Please enter a valid date.',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      })
+      return
+    }
 
     const formattedDate = date.toISOString().split('.')[0] + 'Z'
 
@@ -132,6 +164,18 @@ const DateAndTimeParams: React.FC<Props> = ({
     setLoading(false)
   }
 
+  const formatDate = (inputDate: number | string | Date) => {
+    const date = new Date(inputDate)
+
+    const year = date.getFullYear()
+    const month = String(date.getMonth() + 1).padStart(2, '0')
+    const day = String(date.getDate()).padStart(2, '0')
+    const hours = String(date.getHours()).padStart(2, '0')
+    const minutes = String(date.getMinutes()).padStart(2, '0')
+
+    return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
+
   return (
     <VStack spacing={4} py={4} align="start">
       <FormControl>
@@ -154,6 +198,9 @@ const DateAndTimeParams: React.FC<Props> = ({
 
       <FormControl>
         <FormLabel>Interval Type</FormLabel>
+        <Text fontSize="sm" color="gray.500" mb={2}>
+          Please select the interval type from the options below.
+        </Text>
         <HStack>
           {INTERVAL_TYPES.map(({ label, value }) => (
             <Button
@@ -172,6 +219,10 @@ const DateAndTimeParams: React.FC<Props> = ({
 
       <FormControl>
         <FormLabel>Deadline Interval</FormLabel>
+        <Text fontSize="sm" color="gray.500" mb={2}>
+          Based on the selected interval type, please enter the deadline
+          interval provided the reference date.
+        </Text>
         <Input
           placeholder="Enter deadline interval"
           value={formData.parameters.deadlineInterval || ''}
@@ -183,12 +234,61 @@ const DateAndTimeParams: React.FC<Props> = ({
       </FormControl>
 
       <FormControl>
-        <FormLabel size="md">Please select the reference date</FormLabel>
+        <FormLabel size="md">Reference Date</FormLabel>
+        <Text fontSize="sm" color="gray.500" mb={2}>
+          Please provide a reference date that will serve as the starting point
+          for evaluating the clause
+        </Text>
+        {contractHaveDates && (
+          <VStack spacing={4} align="start" mb={4}>
+            <HStack spacing={4} wrap="wrap">
+              {Object.keys(contractDates)
+                .filter((dateKey) => !dateKey.startsWith('@'))
+                .map((dateKey) => {
+                  const formattedDate = new Date(
+                    contractDates[dateKey]
+                  ).toLocaleString()
+
+                  return (
+                    <Box
+                      key={dateKey}
+                      bg={'teal.100'}
+                      p={2}
+                      borderRadius="md"
+                      boxShadow="sm"
+                      cursor="pointer"
+                      _hover={{
+                        bg: 'teal.200',
+                        transform: 'scale(1.05)',
+                        transition: '0.2s',
+                      }}
+                      onClick={() => {
+                        handleDateChange(formatDate(contractDates[dateKey]))
+                      }}
+                      transition="0.2s"
+                    >
+                      <Text color={'teal.800'} fontSize="smaller">
+                        {formattedDate}
+                      </Text>
+                    </Box>
+                  )
+                })}
+            </HStack>
+          </VStack>
+        )}
+
+        <Text fontSize="sm" color="gray.500" mb={2}>
+          Or input your own reference date:
+        </Text>
+
         <Input
           type="datetime-local"
           value={dateInput}
           onChange={(e) => handleDateChange(e.target.value)}
           width="50%"
+          borderColor="teal.300"
+          _focus={{ borderColor: 'teal.500' }}
+          mb={4}
         />
       </FormControl>
 
@@ -197,6 +297,9 @@ const DateAndTimeParams: React.FC<Props> = ({
         autoExecutableContract?.clauses?.length > 0 && (
           <FormControl>
             <FormLabel>Dependencies</FormLabel>
+            <Text fontSize="sm" color="gray.500" mb={2}>
+              Please select the clauses that this clause depends on.
+            </Text>
             <Select
               placeholder="Select dependencies"
               multiple
