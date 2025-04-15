@@ -179,6 +179,14 @@ const DateAndTimeParams: React.FC<Props> = ({
   return (
     <VStack spacing={4} py={4} align="start">
       <FormControl>
+        <FormLabel>Name</FormLabel>
+        <Input
+          placeholder="Enter name"
+          value={formData.parameters.name || ''}
+          onChange={(e) => handleParameterChange('name', e.target.value)}
+        />
+      </FormControl>
+      <FormControl>
         <FormLabel>Description</FormLabel>
         <Input
           placeholder="Enter description"
@@ -245,10 +253,9 @@ const DateAndTimeParams: React.FC<Props> = ({
               {Object.keys(contractDates)
                 .filter((dateKey) => !dateKey.startsWith('@'))
                 .map((dateKey) => {
-                  const formattedDate = new Date(
-                    contractDates[dateKey]
-                  ).toLocaleString()
-
+                  const formattedKey = contractDates[dateKey]
+                    .replace(/([a-z])([A-Z])/g, '$1 $2')
+                    .replace(/^./, (str: any) => str.toUpperCase())
                   return (
                     <Box
                       key={dateKey}
@@ -268,7 +275,7 @@ const DateAndTimeParams: React.FC<Props> = ({
                       transition="0.2s"
                     >
                       <Text color={'teal.800'} fontSize="smaller">
-                        {formattedDate}
+                        {formattedKey}
                       </Text>
                     </Box>
                   )

@@ -60,4 +60,9 @@ export const ClauseService = {
       })
       .then((res) => res)
   },
+  GetDatesWithClause: async (clasueKey: string) => {
+    return api
+      .get(`getdateswithclause?clauseKey=${encodeURIComponent(clasueKey)}`)
+      .then((res) => res.data)
+  },
 }
