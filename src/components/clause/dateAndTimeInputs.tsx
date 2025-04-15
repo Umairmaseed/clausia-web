@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import {
   Box,
   Button,
@@ -11,19 +11,13 @@ import {
   InputRightElement,
   IconButton,
   useToast,
+  HStack,
 } from '@chakra-ui/react'
 import { CalendarIcon } from '@chakra-ui/icons'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import { ClauseService } from '../../services/clause'
 import { useAuth } from '../../context/Authcontext'
-
-interface Clause {
-  id: string
-  input?: { evaluatedDate?: string }
-  parameters?: Record<string, any>
-  result?: Record<string, any>
-}
 
 interface DateTimeInputProps {
   clause: Clause
@@ -50,7 +44,9 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
 
   const [isEvaluatedOpen, setEvaluatedOpen] = useState(false)
   const [isReferenceOpen, setReferenceOpen] = useState(false)
-  const hasReferenceDate = false
+  const [contractDates, setContractDates] = useState<Record<string, any>>({})
+  const [contractHaveDates, setContractHaveDates] = useState(false)
+  const [hasReferenceDate, setHasReferenceDate] = useState(false)
 
   const showToast = (
     title: string,
@@ -65,6 +61,33 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
       isClosable: true,
     })
   }
+
+  useEffect(() => {
+    setLoading(true)
+    const fetchContractDates = async () => {
+      try {
+        const response = await ClauseService.GetDatesWithClause(clause['@key'])
+        const dates = Object.keys(response)
+        if (dates.length > 0) {
+          setContractHaveDates(true)
+          setContractDates(response.dates)
+        }
+      } catch (error) {
+        showToast(
+          'Error',
+          'Failed to fetch contract dates. Please try again.',
+          'error'
+        )
+      }
+    }
+
+    if (clause.parameters?.referenceDate) {
+      setHasReferenceDate(true)
+    }
+
+    fetchContractDates()
+    setLoading(false)
+  }, [])
 
   const handleSubmit = async () => {
     setLoading(true)
@@ -140,6 +163,48 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
               Provide a reference date if not set earlier or if you want to
               update it. Skip this if you want to keep the existing one
             </Text>
+            {contractHaveDates && (
+              <VStack spacing={4} align="start" mb={4}>
+                <HStack spacing={4} wrap="wrap">
+                  {Object.keys(contractDates)
+                    .filter((dateKey) => !dateKey.startsWith('@'))
+                    .map((dateKey) => {
+                      const formattedKey = contractDates[dateKey]
+                        .replace(/([a-z])([A-Z])/g, '$1 $2')
+                        .replace(/^./, (str: any) => str.toUpperCase())
+                      return (
+                        <Box
+                          key={dateKey}
+                          bg={'teal.100'}
+                          p={2}
+                          borderRadius="md"
+                          boxShadow="sm"
+                          cursor="pointer"
+                          _hover={{
+                            bg: 'teal.200',
+                            transform: 'scale(1.05)',
+                            transition: '0.2s',
+                          }}
+                          onClick={() => {
+                            setReferenceDate(contractDates[dateKey])
+                          }}
+                          transition="0.2s"
+                        >
+                          <Text color={'teal.800'} fontSize="smaller">
+                            {formattedKey}
+                          </Text>
+                        </Box>
+                      )
+                    })}
+                </HStack>
+              </VStack>
+            )}
+
+            {contractHaveDates && (
+              <Text fontSize="sm" color="gray.500" mb={2}>
+                Or input your own reference date:
+              </Text>
+            )}
             <InputGroup>
               <DatePicker
                 selected={referenceDate}
@@ -167,6 +232,48 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
           <Text fontSize="sm" color="gray.500" mb={2}>
             Provide the date according to which the clause will be evaluated.
           </Text>
+          {contractHaveDates && (
+            <VStack spacing={4} align="start" mb={4}>
+              <HStack spacing={4} wrap="wrap">
+                {Object.keys(contractDates)
+                  .filter((dateKey) => !dateKey.startsWith('@'))
+                  .map((dateKey) => {
+                    const formattedKey = contractDates[dateKey]
+                      .replace(/([a-z])([A-Z])/g, '$1 $2')
+                      .replace(/^./, (str: any) => str.toUpperCase())
+                    return (
+                      <Box
+                        key={dateKey}
+                        bg={'teal.100'}
+                        p={2}
+                        borderRadius="md"
+                        boxShadow="sm"
+                        cursor="pointer"
+                        _hover={{
+                          bg: 'teal.200',
+                          transform: 'scale(1.05)',
+                          transition: '0.2s',
+                        }}
+                        onClick={() => {
+                          setEvaluatedOpen(contractDates[dateKey])
+                        }}
+                        transition="0.2s"
+                      >
+                        <Text color={'teal.800'} fontSize="smaller">
+                          {formattedKey}
+                        </Text>
+                      </Box>
+                    )
+                  })}
+              </HStack>
+            </VStack>
+          )}
+
+          {contractHaveDates && (
+            <Text fontSize="sm" color="gray.500" mb={2}>
+              Or input your own evaluate date:
+            </Text>
+          )}
           <InputGroup>
             <DatePicker
               selected={evaluatedDate}
