@@ -186,7 +186,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                             transition: '0.2s',
                           }}
                           onClick={() => {
-                            setReferenceDate(contractDates[dateKey])
+                            setReferenceDate(new Date(contractDates[dateKey]))
                           }}
                           transition="0.2s"
                         >
@@ -255,7 +255,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                           transition: '0.2s',
                         }}
                         onClick={() => {
-                          setEvaluatedOpen(contractDates[dateKey])
+                          setEvaluatedDate(new Date(contractDates[dateKey]))
                         }}
                         transition="0.2s"
                       >
