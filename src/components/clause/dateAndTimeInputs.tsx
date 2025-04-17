@@ -169,7 +169,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                   {Object.keys(contractDates)
                     .filter((dateKey) => !dateKey.startsWith('@'))
                     .map((dateKey) => {
-                      const formattedKey = contractDates[dateKey]
+                      const formattedKey = dateKey
                         .replace(/([a-z])([A-Z])/g, '$1 $2')
                         .replace(/^./, (str: any) => str.toUpperCase())
                       return (
@@ -238,7 +238,7 @@ const DateTimeInput: React.FC<DateTimeInputProps> = ({
                 {Object.keys(contractDates)
                   .filter((dateKey) => !dateKey.startsWith('@'))
                   .map((dateKey) => {
-                    const formattedKey = contractDates[dateKey]
+                    const formattedKey = dateKey
                       .replace(/([a-z])([A-Z])/g, '$1 $2')
                       .replace(/^./, (str: any) => str.toUpperCase())
                     return (
