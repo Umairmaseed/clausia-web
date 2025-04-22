@@ -9,6 +9,7 @@ import {
   Divider,
   Tag,
   useToast,
+  HStack,
 } from '@chakra-ui/react'
 import { ActionType, getActionTypeLabel } from '../utils/actionType'
 import { useAuth } from '../context/Authcontext'
@@ -18,9 +19,13 @@ import { formatObjectEntries } from '../utils/formatObjectEntries'
 import GetCreditInput from '../components/clause/getCreditInputs'
 import MakePaymentInputs from '../components/clause/makePaymentInputs'
 import GetDeductionInput from '../components/clause/getDeductionInputs'
+import { ContractService } from '../services/contract'
 
 const ClauseDashboard = () => {
   const { id } = useParams<{ id: string }>()
+  const queryParams = new URLSearchParams(window.location.search)
+  const contractId = queryParams.get('contract')
+  const [contract, setContract] = useState<AutoExecutableContract>()
   const [clause, setClause] = useState<Clause | null>(null)
   const { setLoading } = useAuth()
   const toast = useToast()
@@ -35,7 +40,28 @@ const ClauseDashboard = () => {
 
   useEffect(() => {
     fetchClause()
+    fetchContract()
   }, [id])
+
+  const fetchContract = async () => {
+    setLoading(true)
+    if (contractId) {
+      try {
+        const response = await ContractService.GetContract(contractId)
+        setContract(response.contract || null)
+      } catch (error) {
+        toast({
+          title: 'Error fetching contract',
+          description:
+            'An error occurred while fetching the contract. Please try again later.',
+          status: 'error',
+          duration: 5000,
+          isClosable: true,
+        })
+      }
+    }
+    setLoading(false)
+  }
 
   const fetchClause = async () => {
     setLoading(true)
@@ -58,6 +84,7 @@ const ClauseDashboard = () => {
   }
 
   if (!clause) return null
+  if (!contract) return null
 
   const hasInput = clause.input && Object.keys(clause.input).length > 0
 
@@ -142,6 +169,26 @@ const ClauseDashboard = () => {
             </VStack>
           </Box>
         )}
+        {clause.dependencies && clause.dependencies.length > 0 && (
+          <Box p={4} bg="gray.50" borderRadius="md">
+            <Text fontWeight="bold" color="orange.400" mb={4}>
+              Dependencies
+            </Text>
+            <VStack spacing={2} align="stretch">
+              {clause.dependencies.map((dependency) => (
+                <HStack key={dependency.id} spacing={2}>
+                  <Text>
+                    <strong>Clause ID:</strong> {dependency.id}
+                  </Text>
+                  <Text>
+                    <strong> Finalized:</strong>{' '}
+                    {dependency.finalized ? 'Yes' : 'No'}
+                  </Text>
+                </HStack>
+              ))}
+            </VStack>
+          </Box>
+        )}
         {clause.result && (
           <Box p={4} bg="gray.50" borderRadius="md">
             <Text fontWeight="bold" color="green.400" mb={4}>
@@ -150,13 +197,6 @@ const ClauseDashboard = () => {
             <VStack spacing={2} align="stretch">
               {renderFormattedText(clause.result)}
             </VStack>
-          </Box>
-        )}
-        {clause.dependencies && clause.dependencies.length > 0 && (
-          <Box p={4} bg="gray.50" borderRadius="md">
-            <Text>
-              <strong>Dependencies:</strong> {clause.dependencies.join(', ')}
-            </Text>
           </Box>
         )}
         {!hasInput &&
@@ -181,6 +221,7 @@ const ClauseDashboard = () => {
             <GetDeductionInput
               clause={clause}
               onSubmitSuccess={() => fetchClause()}
+              contract={contract}
             />
           )}
         {!clause.finalized && clause.actionType === ActionType.Payment && (
