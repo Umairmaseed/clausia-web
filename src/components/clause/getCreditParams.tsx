@@ -13,8 +13,9 @@ import {
   NumberInput,
   NumberInputField,
   Checkbox,
-  Select,
+  Flex,
 } from '@chakra-ui/react'
+import Select from 'react-select'
 import { useAuth } from '../../context/Authcontext'
 import { ClauseService } from '../../services/clause'
 import { ActionType } from '../../utils/actionType'
@@ -126,6 +127,12 @@ const GetCreditForm: React.FC<GetCreditFormProps> = ({
     setLoading(false)
   }
 
+  const options =
+    autoExecutableContract?.clauses?.map((clause) => ({
+      value: clause.id,
+      label: clause.description,
+    })) || []
+
   return (
     <Box py={4}>
       <VStack spacing={4} align="stretch">
@@ -207,28 +214,43 @@ const GetCreditForm: React.FC<GetCreditFormProps> = ({
             <FormControl>
               <FormLabel>Dependencies</FormLabel>
               <Select
-                placeholder="Select dependencies"
-                multiple
-                onChange={(e) => {
-                  const selectedIds = Array.from(
-                    e.target.selectedOptions,
+                isMulti
+                options={options}
+                onChange={(selectedOptions) => {
+                  const selectedIds = selectedOptions.map(
                     (option) => option.value
                   )
                   handleDependenciesChange(selectedIds)
                 }}
-              >
-                {autoExecutableContract?.clauses?.map((clause) => (
-                  <option key={clause.id} value={clause.id}>
-                    {clause.description}
-                  </option>
-                ))}
-              </Select>
+                styles={{
+                  menu: (provided) => ({
+                    ...provided,
+                    zIndex: 9999,
+                  }),
+                }}
+              />
             </FormControl>
           )}
 
-        <Button colorScheme="blue" onClick={handleSubmit}>
-          Submit
-        </Button>
+        <Flex my={4}>
+          <Button
+            colorScheme="blue"
+            mr={3}
+            size="sm"
+            variant={'outline'}
+            onClick={() => setOpenClauseModel(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            colorScheme="green"
+            mr={3}
+            size="sm"
+            onClick={() => handleSubmit()}
+          >
+            Submit
+          </Button>
+        </Flex>
       </VStack>
     </Box>
   )
