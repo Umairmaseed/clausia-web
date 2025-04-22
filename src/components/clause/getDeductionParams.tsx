@@ -12,9 +12,10 @@ import {
   VStack,
   NumberInput,
   NumberInputField,
-  Checkbox,
-  Select,
+  Text,
+  Flex,
 } from '@chakra-ui/react'
+import Select from 'react-select'
 import { useAuth } from '../../context/Authcontext'
 import { ClauseService } from '../../services/clause'
 import { ActionType } from '../../utils/actionType'
@@ -43,7 +44,6 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
   const [fineName, setFineName] = useState<string>('')
   const [maxPercentage, setMaxPercentage] = useState<number>(10)
   const [maxReferenceValue, setMaxReferenceValue] = useState<string>('')
-  const [imposeFine, setImposeFine] = useState<boolean>(false)
   const { setLoading } = useAuth()
   const toast = useToast()
 
@@ -73,7 +73,6 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
       maxReferenceValue: maxReferenceValue
         ? parseFloat(maxReferenceValue)
         : undefined,
-      imposeFine,
     }
 
     const updatedFormData = {
@@ -123,6 +122,12 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
     }))
   }
 
+  const options =
+    autoExecutableContract?.clauses?.map((clause) => ({
+      value: clause.id,
+      label: clause.description,
+    })) || []
+
   return (
     <Box py={4}>
       <VStack spacing={4} align="stretch">
@@ -155,6 +160,11 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
 
         <FormControl>
           <FormLabel>Max Percentage: {maxPercentage}%</FormLabel>
+          <Text fontSize="sm" color="gray.500">
+            Define the maximum allowable percentage for this clause. If the
+            input percentage exceeds this limit, the system will apply the
+            maximum value as the cap.
+          </Text>
           <Slider
             value={maxPercentage}
             onChange={setMaxPercentage}
@@ -171,6 +181,12 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
 
         <FormControl>
           <FormLabel>Max Reference Value</FormLabel>
+          <Text fontSize="sm" color="gray.500">
+            Define the maximum reference value for this clause. This value will
+            be used as a cap when calculating the deduction. If the reference
+            value provided in the input exceeds this limit, the system will
+            apply the maximum value as the cap.
+          </Text>
           <NumberInput>
             <NumberInputField
               placeholder="Enter max reference value"
@@ -180,43 +196,49 @@ const GetDeductionForm: React.FC<GetDeductionFormProps> = ({
           </NumberInput>
         </FormControl>
 
-        <FormControl>
-          <Checkbox
-            isChecked={imposeFine}
-            onChange={(e) => setImposeFine(e.target.checked)}
-          >
-            Impose Fine
-          </Checkbox>
-        </FormControl>
-
         {autoExecutableContract &&
           autoExecutableContract.clauses &&
           autoExecutableContract?.clauses?.length > 0 && (
             <FormControl>
               <FormLabel>Dependencies</FormLabel>
               <Select
-                placeholder="Select dependencies"
-                multiple
-                onChange={(e) => {
-                  const selectedIds = Array.from(
-                    e.target.selectedOptions,
+                isMulti
+                options={options}
+                onChange={(selectedOptions) => {
+                  const selectedIds = selectedOptions.map(
                     (option) => option.value
                   )
                   handleDependenciesChange(selectedIds)
                 }}
-              >
-                {autoExecutableContract?.clauses?.map((clause) => (
-                  <option key={clause.id} value={clause.id}>
-                    {clause.description}
-                  </option>
-                ))}
-              </Select>
+                styles={{
+                  menu: (provided) => ({
+                    ...provided,
+                    zIndex: 9999,
+                  }),
+                }}
+              />
             </FormControl>
           )}
 
-        <Button colorScheme="blue" onClick={handleSubmit}>
-          Submit
-        </Button>
+        <Flex my={4}>
+          <Button
+            colorScheme="blue"
+            mr={3}
+            size="sm"
+            variant={'outline'}
+            onClick={() => setOpenClauseModel(false)}
+          >
+            Cancel
+          </Button>
+          <Button
+            colorScheme="green"
+            mr={3}
+            size="sm"
+            onClick={() => handleSubmit()}
+          >
+            Submit
+          </Button>
+        </Flex>
       </VStack>
     </Box>
   )
