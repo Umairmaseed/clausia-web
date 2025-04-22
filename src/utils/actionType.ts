@@ -14,7 +14,6 @@ export const actionTypeDropdownValues: { label: string; value: ActionType }[] =
     { label: 'Get Credit', value: ActionType.GetCredit },
     { label: 'Payment', value: ActionType.Payment },
     { label: 'Finish Contract', value: ActionType.FinishContract },
-    { label: 'Non Executable', value: ActionType.NonExecutable },
   ]
 
 /**
