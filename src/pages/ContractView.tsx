@@ -51,7 +51,7 @@ const ContractView: React.FC = () => {
   }
 
   const navigateToClause = (clauseId: string) => {
-    window.location.href = `/clause/view/${clauseId}`
+    window.location.href = `/clause/view/${clauseId}?contract=${id}`
   }
 
   return (
