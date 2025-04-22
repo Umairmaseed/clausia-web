@@ -6,12 +6,12 @@ import {
   VStack,
   Button,
   HStack,
-  Select,
   Flex,
   useToast,
   Text,
   Box,
 } from '@chakra-ui/react'
+import Select from 'react-select'
 import { ActionType } from '../../utils/actionType'
 import { ClauseService } from '../../services/clause'
 import { useAuth } from '../../context/Authcontext'
@@ -176,6 +176,12 @@ const DateAndTimeParams: React.FC<Props> = ({
     return `${year}-${month}-${day}T${hours}:${minutes}`
   }
 
+  const options =
+    autoExecutableContract?.clauses?.map((clause) => ({
+      value: clause.id,
+      label: clause.description,
+    })) || []
+
   return (
     <VStack spacing={4} py={4} align="start">
       <FormControl>
@@ -304,26 +310,22 @@ const DateAndTimeParams: React.FC<Props> = ({
         autoExecutableContract?.clauses?.length > 0 && (
           <FormControl>
             <FormLabel>Dependencies</FormLabel>
-            <Text fontSize="sm" color="gray.500" mb={2}>
-              Please select the clauses that this clause depends on.
-            </Text>
             <Select
-              placeholder="Select dependencies"
-              multiple
-              onChange={(e) => {
-                const selectedIds = Array.from(
-                  e.target.selectedOptions,
+              isMulti
+              options={options}
+              onChange={(selectedOptions) => {
+                const selectedIds = selectedOptions.map(
                   (option) => option.value
                 )
                 handleDependenciesChange(selectedIds)
               }}
-            >
-              {autoExecutableContract?.clauses?.map((clause) => (
-                <option key={clause.id} value={clause.id}>
-                  {clause.description}
-                </option>
-              ))}
-            </Select>
+              styles={{
+                menu: (provided) => ({
+                  ...provided,
+                  zIndex: 9999,
+                }),
+              }}
+            />
           </FormControl>
         )}
       <Flex my={4}>
