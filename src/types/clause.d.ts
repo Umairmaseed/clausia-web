@@ -17,7 +17,7 @@ type Clause = {
   parameters?: Record<string, any>
   input?: Record<string, any>
   executable: boolean
-  dependencies?: string[]
+  dependencies?: Array<Record<string, any>>
   actionType: number
   finalized?: boolean
   result?: Record<string, any>
