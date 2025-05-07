@@ -41,7 +41,7 @@ const Navbar = () => {
         px={10}
       >
         <Heading as="h1" size="md" mr={4}>
-          Goprocess
+          clausia
         </Heading>
 
         {isLoggedIn ? (
